@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: Juniper-Parent
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: adisr
+Implementation-Vendor-Id: com.iig.gcp
+Build-Jdk: 1.8.0_171
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/Juniper-Parent
+Created-By: Maven Integration for Eclipse
+Main-Class: com.iig.gcp.IigOracleApplication
+
