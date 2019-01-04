@@ -1,6 +1,6 @@
 <jsp:include page="cdg_header.jsp" />
       <div class="main-panel">
-        <div class="content-wrapper" style="box-shadow: 0 0 15px 15px white inset;background-image:url('${pageContext.request.contextPath}/assets/img/snow.gif')">
+        <div class="content-wrapper">
           <div class="row">
             <div class="col-md-4 stretch-card grid-margin">
               <div class="card bg-gradient-primary card-img-holder text-white">
