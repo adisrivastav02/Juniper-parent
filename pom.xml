@@ -27,6 +27,15 @@
 	</properties>
 
 	<dependencies>
+	
+	
+	<dependency>
+	<groupId>com.juniper.logging</groupId>
+	<artifactId>logging</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+	
+	
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -101,10 +110,7 @@
 			<artifactId>httpclient</artifactId>
 			<!-- <version>4.5.5</version> -->
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-		</dependency>
+		
 		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
 		<!-- Apache Commons IO -->
 		<dependency>
@@ -120,6 +126,10 @@
 			<version>2.0.2.RELEASE</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
