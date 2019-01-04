@@ -63,55 +63,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .formLogin()
         .loginPage("/login").defaultSuccessUrl("/login/submit")
         .permitAll();
-		
-		
-		
-		/*.formLogin().loginPage("/index").loginProcessingUrl("/index").defaultSuccessUrl("/login/submit")
-		// Configures the logout function
-		.and().logout().deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/index")
-		// Configures url based authorization
-		.and().authorizeRequests()
-		// Anyone can access the urls
-		.antMatchers("/","/hip/**","/hip","/hipmaster","/hipmaster/**","/feature","/register","/accessDenied","/error").permitAll()
-		// The rest of the our application is protected.
-		.antMatchers("/cdg_home").hasAnyAuthority("ADMIN");*/
-		
-		
-		
-		/*http.formLogin().defaultSuccessUrl("/login/submit").
-		and().logout().deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/index").
-		and().authorizeRequests().and().antMatchers("/cdg_home").hasAnyAuthority(AppRole.GENERIC_USER)*/
-		
-		/*http
-				// Configures form login
-				.formLogin().loginPage("/login").loginProcessingUrl("/login/authenticate")
-				.failureUrl("/login?error=bad_credentials")
-				// Configures the logout function
-				.and().logout().deleteCookies("JSESSIONID").logoutUrl("/logout").logoutSuccessUrl("/login")
-				// Configures url based authorization
-				.and().authorizeRequests()
- 
-				// Pages do not require login
-				.antMatchers("/","/hip/**","/hip","/hipmaster","/hipmaster/**","/feature","/register","/accessDenied","/error").permitAll()
-				// The rest of the our application is protected.
-				//.antMatchers("/feature").hasAnyAuthority("user")
-				.and()
-				.exceptionHandling().accessDeniedPage("/accessDenied")
-				;
- 
-       //http.authorizeRequests().antMatchers("/userInfo","/extract/**","/publishing/**").access("hasRole('" + AppRole.ROLE_USER + "')")
-       
-       //.anyRequest().authenticated() ;
- */
-     
- 
     }
  
    
     @Override
 	protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
 		authManagerBuilder.authenticationProvider(
-				activeDirectoryLdapAuthenticationProvider())/* .userDetailsService(userDetailsService()) */;
+				activeDirectoryLdapAuthenticationProvider());
 	}
     
     
@@ -122,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		provider.setConvertSubErrorCodesToExceptions(true);
 		provider.setUseAuthenticationRequestCredentials(true);
 		provider.setUserDetailsContextMapper(userDetailsContextMapper);
-		//provider.setAuthoritiesMapper(GrantedAuthoritiesMapper);
+		
 		return provider;
 	}
     
@@ -132,5 +90,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	       .ignoring()
 	       .antMatchers("/resources/**", "/assets/**");
 	}
- 
 }

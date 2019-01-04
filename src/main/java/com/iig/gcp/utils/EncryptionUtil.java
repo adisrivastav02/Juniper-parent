@@ -42,41 +42,28 @@ public class EncryptionUtil {
 			while (scanner.hasNextLine()) {
 				fileContents.append(lineSeparator + scanner.nextLine());
 			}
-			System.out.println("fileContents.toString()" + fileContents.toString());
 			return fileContents.toString();
 		} finally {
 			scanner.close();
 		}
 	}
 	
-	
-	
-	
 	public static  String decryptText(byte[] byteCipherText, SecretKey secKey) throws Exception {
-
 		// AES defaults to AES/ECB/PKCS5Padding in Java 7
-		
-		
-
-		System.out.println(secKey.toString());
 
 		Cipher aesCipher = Cipher.getInstance("AES");
 
 		aesCipher.init(Cipher.DECRYPT_MODE, secKey);
 
 		byte[] bytePlainText = aesCipher.doFinal(byteCipherText);
-		
-		
 
 		return new String(bytePlainText);
-
 	}
 	
 	public static byte[] encryptText(String plainText, String key) throws Exception {
 
 		
 		// AES defaults to AES/ECB/PKCS5Padding in Java 7
-		System.out.println("key is "+key);
 		SecretKey secKey=decodeKeyFromString(key);
 
 		Cipher aesCipher = Cipher.getInstance("AES");
@@ -101,6 +88,5 @@ public class EncryptionUtil {
 		return password;
 		
 	}
-
 
 }

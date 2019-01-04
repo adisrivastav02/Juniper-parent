@@ -243,25 +243,6 @@ public class AdminDAOImpl implements AdminDAO {
 		return seq;
 	}
 
-	/*@Override
-	public void onboardUser(int projectseq, int selectUser_Seq, String feature_seq) throws Exception {
-		// deleteEntries(projectseq,selectUser_Seq);
-		Connection connection = null;
-		connection = ConnectionUtils.getConnection();
-		String[] arrString = feature_seq.split(",");
-		if (!arrString[0].equals("")) {
-			for (String feature : arrString) {
-				PreparedStatement pstm = connection.prepareStatement("insert into juniper_pro_u_feat_link(user_sequence,project_sequence,feature_sequence) values (?,?,?)");
-				pstm.setInt(1, selectUser_Seq);
-				pstm.setInt(2, projectseq);
-				pstm.setString(3, feature);
-				pstm.executeUpdate();
-
-			}
-		}
-		ConnectionUtils.closeQuietly(connection);
-	}*/
-
 	@Override
 	public void deleteEntries(int projectseq, int selectUser_Seq) throws Exception {
 		Connection connection = null;

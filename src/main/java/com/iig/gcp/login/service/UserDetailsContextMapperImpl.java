@@ -24,13 +24,6 @@ public class UserDetailsContextMapperImpl implements UserDetailsContextMapper {
 	@Autowired
 	private LoginService loginService;
 	
-	/*@Override
-	public UserDetails loadUserByUsername(String arg0) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
-		System.out.println("######################################" + arg0);
-		return null;
-	}*/
-
 	@Override
 	public UserDetails mapUserFromContext(DirContextOperations arg0, String arg1,
 			Collection<? extends GrantedAuthority> arg2) {
@@ -39,7 +32,6 @@ public class UserDetailsContextMapperImpl implements UserDetailsContextMapper {
 		try {
 			arrUserAccount= loginService.findUserFromId(arg1);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			arrUserAccount = new UserAccount();
 			arrUserAccount.setUser_id(arg1);
@@ -48,7 +40,6 @@ public class UserDetailsContextMapperImpl implements UserDetailsContextMapper {
 			userRoles= loginService.findUserRoles(arg1);
 			userRoles.add(AppRole.GENERIC_USER);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			userRoles = new ArrayList<String>();
 			userRoles.add(AppRole.GENERIC_USER);
@@ -59,9 +50,6 @@ public class UserDetailsContextMapperImpl implements UserDetailsContextMapper {
 
 	@Override
 	public void mapUserToContext(UserDetails arg0, DirContextAdapter arg1) {
-		// TODO Auto-generated method stub
 		System.out.println("done ######");
-		
 	}
-
 }

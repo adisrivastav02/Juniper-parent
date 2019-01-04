@@ -31,25 +31,18 @@ String onBoardUser(@Valid String x, @Valid boolean isAdmin, HttpServletRequest r
 	ArrayList<Feature> getFeaturesAlready(String userid, String project)throws Exception;
 
 	int getUserSequence(String userid)throws Exception;
-	
-
-
 	public String registerProject(@Valid String projectId, String projectName, String projectOwner, String projectDescription, int userSequence) throws ClassNotFoundException, Exception;
 	Project getProject(@Valid String projectId) throws Exception;
 
 	String registerAddAdminAccess(int projectSeq, int user_sequence) throws Exception;
-	
 
 	//Project
 	List<String> getProjects();
 	Project fetchProjectDetails(@Valid String projectId);
 	String updateProject(@Valid String projectId, String projectName, String projectOwner, String projectDetails,String user_id);
-//String deleteProject(@Valid String projectId)throws Exception;
-
-	String updateUser(@Valid String userId, String userPwd, String onboardedUserFullName,String userEmail, String loggedInUser) throws ClassNotFoundException, SQLException;
 
-	List<String> fetchUserIds() throws ClassNotFoundException, SQLException;
-
+	String updateUser(@Valid String userId, String userPwd, String onboardedUserFullName,String userEmail, String loggedInUser) throws ClassNotFoundException, SQLException;
+	List<String> fetchUserIds() throws ClassNotFoundException, SQLException;
 	UserAccount fetchUserDetails(String user_val) throws ClassNotFoundException, SQLException;
 	String linkUserGroupsToNewProject(int user_sequence, Project project) throws ClassNotFoundException, SQLException;
 

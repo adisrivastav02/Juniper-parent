@@ -28,7 +28,7 @@ public class LoginDAOImpl implements LoginDAO {
 	private static String UGROUP_USER_MASTER_TABLE = "JUNIPER_UGROUP_USER_LINK";
 	private static String FEATURE_MASTER_TABLE = "JUNIPER_FEATURE_MASTER";
 	private static String PROJECT_MASTER_TABLE = "JUNIPER_PROJECT_MASTER";
-	
+
 	//User_Group_Constants
 	private static String JADMIN_GROUP = "JUNIPER_JADMIN";
 
@@ -52,11 +52,9 @@ public class LoginDAOImpl implements LoginDAO {
 		return arrUsers;
 	}
 
-
-	
 	@Override
 	public UserAccount findUserFromId(String user_id) throws Exception {
-		
+
 		String sql = "select user_id,user_pass,user_sequence from juniper_user_master where user_id='"+user_id+"'";
 
 		Connection conn= ConnectionUtils.getConnection();
@@ -64,25 +62,25 @@ public class LoginDAOImpl implements LoginDAO {
 		ResultSet rs = pstm.executeQuery();
 		UserAccount user = new UserAccount();
 		while (rs.next()) {
-				user.setUser_id(rs.getString(1));
-				user.setUser_pass(rs.getString(2));
-				user.setUser_sequence(rs.getInt(3));
+			user.setUser_id(rs.getString(1));
+			user.setUser_pass(rs.getString(2));
+			user.setUser_sequence(rs.getInt(3));
 		}
 		ConnectionUtils.closeQuietly(conn);
 		return user;
 	}
-	
-	
+
+
 	@Override
 	public List<String> findUserRoles(String user_id) throws Exception {
-		
+
 		String sql = "select distinct ugm.feature_list from juniper_user_master u,juniper_ugroup_user_link ugl,juniper_user_group_master ugm where u.user_sequence=ugl.user_sequence and ugl.USER_GROUP_SEQUENCE =ugm.USER_GROUP_SEQUENCE and u.USER_ID='"+user_id+"'";
 
 		Connection conn= ConnectionUtils.getConnection();
 		PreparedStatement pstm = conn.prepareStatement(sql); 
 		ResultSet rs = pstm.executeQuery();
-List<String> userRole = new ArrayList<String>();
-		
+		List<String> userRole = new ArrayList<String>();
+
 		Set<String> features = new HashSet<String>();
 		while (rs.next()) {
 			for(String r: rs.getString(1).split(",")) {
@@ -98,7 +96,6 @@ List<String> userRole = new ArrayList<String>();
 		}
 		if(featureId.length() > 0) {
 			featureId.setLength(featureId.length()-1);
-			System.out.println("features"+featureId.toString());
 			sql = "select feature_name FROM juniper_feature_master f where f.feature_sequence in (" +featureId.toString()+ ")";
 			pstm = conn.prepareStatement(sql); 
 			rs = pstm.executeQuery();
@@ -109,8 +106,8 @@ List<String> userRole = new ArrayList<String>();
 		ConnectionUtils.closeQuietly(conn);
 		return userRole;
 	}
-	
-	
+
+
 	/**
 	 * 
 	 */
@@ -163,7 +160,7 @@ List<String> userRole = new ArrayList<String>();
 		return userGroups;
 
 	}
-	
+
 	/**
 	 * 
 	 * @param user_sequence
@@ -182,31 +179,31 @@ List<String> userRole = new ArrayList<String>();
 		int i=0;
 		Connection conn= ConnectionUtils.getConnection();
 		List<UserGroup> userGroups=fetchGroupDetailsForUser(conn, user_sequence,project);
-			Set<Integer>sortedFeatureList=fetchSortedFeatureIds(userGroups);
-			String sql = "select f.feature_link,f.feature_level,f.feature_name FROM "+FEATURE_MASTER_TABLE+" f where f.feature_sequence=?";
-			PreparedStatement pstm = conn.prepareStatement(sql);
-			for(int featureId:sortedFeatureList) {
-				pstm.setInt(1, featureId);
-				ResultSet rs = pstm.executeQuery();
-				while(rs.next()){
-					menu_link = rs.getString(1);
-					menu_level = rs.getInt(2);
-					menu_name.add(rs.getString(3));
-					menu_levell.add(menu_level);
-					if(menu_level==1){
-						if(i==0){
-							menu_code=menu_link;
-						}
-						else{
-							menu_code=menu_code+"</ul></div></li>"+menu_link;
-						}
+		Set<Integer>sortedFeatureList=fetchSortedFeatureIds(userGroups);
+		String sql = "select f.feature_link,f.feature_level,f.feature_name FROM "+FEATURE_MASTER_TABLE+" f where f.feature_sequence=?";
+		PreparedStatement pstm = conn.prepareStatement(sql);
+		for(int featureId:sortedFeatureList) {
+			pstm.setInt(1, featureId);
+			ResultSet rs = pstm.executeQuery();
+			while(rs.next()){
+				menu_link = rs.getString(1);
+				menu_level = rs.getInt(2);
+				menu_name.add(rs.getString(3));
+				menu_levell.add(menu_level);
+				if(menu_level==1){
+					if(i==0){
+						menu_code=menu_link;
 					}
 					else{
-						menu_code=menu_code+menu_link;
+						menu_code=menu_code+"</ul></div></li>"+menu_link;
 					}
-					i++;
 				}
+				else{
+					menu_code=menu_code+menu_link;
+				}
+				i++;
 			}
+		}
 		ConnectionUtils.closeQuietly(conn);
 		return menu_code=menu_code+"</ul></div></li>";
 	}
@@ -233,9 +230,9 @@ List<String> userRole = new ArrayList<String>();
 		return sortedFeatures;
 	}
 
-/**
- * This method check if user belongs to JAdmin, if yes he will be given JAdmin features.
- */
+	/**
+	 * This method check if user belongs to JAdmin, if yes he will be given JAdmin features.
+	 */
 	@Override
 	public String getJAdminMenuCodes(int user_sequence) throws ClassNotFoundException, SQLException {
 		String menu_code="";
@@ -251,60 +248,60 @@ List<String> userRole = new ArrayList<String>();
 		if(!isAdmin.equals("Y")) {
 			return menu_code;
 		}
-			Set<Integer>sortedFeatureList=fetchSortedFeatureIds(userGroups);
-			String sql = "select f.feature_link,f.feature_level,f.feature_name FROM "+FEATURE_MASTER_TABLE+" f where f.feature_admin= ? and f.feature_sequence=?";
-			PreparedStatement pstm = conn.prepareStatement(sql);
-			for(int featureId:sortedFeatureList) {
-				pstm.setString(1, "Y");
-				pstm.setInt(2, featureId);
-				ResultSet rs = pstm.executeQuery();
-				while(rs.next()){
-					menu_link = rs.getString(1);
-					menu_level = rs.getInt(2);
-					menu_name.add(rs.getString(3));
-					menu_levell.add(menu_level);
-					if(menu_level==1){
-						if(i==0){
-							menu_code=menu_link;
-						}
-						else{
-							menu_code=menu_code+"</ul></div></li>"+menu_link;
-						}
+		Set<Integer>sortedFeatureList=fetchSortedFeatureIds(userGroups);
+		String sql = "select f.feature_link,f.feature_level,f.feature_name FROM "+FEATURE_MASTER_TABLE+" f where f.feature_admin= ? and f.feature_sequence=?";
+		PreparedStatement pstm = conn.prepareStatement(sql);
+		for(int featureId:sortedFeatureList) {
+			pstm.setString(1, "Y");
+			pstm.setInt(2, featureId);
+			ResultSet rs = pstm.executeQuery();
+			while(rs.next()){
+				menu_link = rs.getString(1);
+				menu_level = rs.getInt(2);
+				menu_name.add(rs.getString(3));
+				menu_levell.add(menu_level);
+				if(menu_level==1){
+					if(i==0){
+						menu_code=menu_link;
 					}
 					else{
-						menu_code=menu_code+menu_link;
+						menu_code=menu_code+"</ul></div></li>"+menu_link;
 					}
-					i++;
 				}
+				else{
+					menu_code=menu_code+menu_link;
+				}
+				i++;
 			}
+		}
 		ConnectionUtils.closeQuietly(conn);
 		return menu_code=menu_code+"</ul></div></li>";
 	}
 
-/**
- * 
- * @param conn
- * @param userGroups
- * @return
- * @throws SQLException 
- */
+	/**
+	 * 
+	 * @param conn
+	 * @param userGroups
+	 * @return
+	 * @throws SQLException 
+	 */
 	private String checkIfUserBelongsToJAdminGroup(Connection conn,List<UserGroup> userGroups) throws SQLException {
-			for(UserGroup userGroup:userGroups){
-				String sql = "select user_group_name from "+USER_GROUP_MASTER_TABLE+" where user_group_sequence="+userGroup.getUser_group_sequence()+"";
-				PreparedStatement pstm = conn.prepareStatement(sql);
-				ResultSet rs = pstm.executeQuery();
-				while (rs.next()) {
-					String userGroupName=rs.getString(1);
-					if(userGroupName.equals(""+JADMIN_GROUP+"")) {
-						 return "Y";
-					}
+		for(UserGroup userGroup:userGroups){
+			String sql = "select user_group_name from "+USER_GROUP_MASTER_TABLE+" where user_group_sequence="+userGroup.getUser_group_sequence()+"";
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			ResultSet rs = pstm.executeQuery();
+			while (rs.next()) {
+				String userGroupName=rs.getString(1);
+				if(userGroupName.equals(""+JADMIN_GROUP+"")) {
+					return "Y";
 				}
 			}
-			return "N";
 		}
-	
-	
-	
+		return "N";
+	}
+
+
+
 	/**
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
@@ -331,7 +328,7 @@ List<String> userRole = new ArrayList<String>();
 		return userGroups;
 
 	}
-	
+
 
 	@Override
 	public ArrayList<RunFeeds1> getProjectFeeds(String project) throws Exception {
@@ -340,7 +337,7 @@ List<String> userRole = new ArrayList<String>();
 		Connection conn= ConnectionUtils.getConnection();
 		RunFeeds1 rf = null;
 		PreparedStatement pstm = conn.prepareStatement(sql); 
-		 pstm.setString(1, project);
+		pstm.setString(1, project);
 		ResultSet rs = pstm.executeQuery();
 		while (rs.next()) {
 			rf = new RunFeeds1();
@@ -351,7 +348,7 @@ List<String> userRole = new ArrayList<String>();
 		ConnectionUtils.closeQuietly(conn);
 		return feeds_arr;
 	}
-	
+
 	@Override
 	public ArrayList<RunFeeds1> getProjectUsers(String project) throws SQLException, Exception {
 		ArrayList<RunFeeds1> users_arr = new ArrayList<RunFeeds1>();
@@ -359,7 +356,7 @@ List<String> userRole = new ArrayList<String>();
 		String sql = "SELECT DISTINCT ul.USER_SEQUENCE,um.USER_ID,um.USER_FULLNAME FROM JUNIPER_UGROUP_USER_LINK ul LEFT JOIN JUNIPER_USER_MASTER um ON ul.USER_SEQUENCE=um.USER_SEQUENCE WHERE ul.PROJECT_SEQUENCE in (SELECT PROJECT_SEQUENCE FROM JUNIPER_PROJECT_MASTER WHERE PROJECT_ID=?)";
 		Connection conn= ConnectionUtils.getConnection();
 		PreparedStatement pstm = conn.prepareStatement(sql); 
-		 pstm.setString(1, project);
+		pstm.setString(1, project);
 		ResultSet rs = pstm.executeQuery();
 		while (rs.next()) {
 			rf = new RunFeeds1();
@@ -371,7 +368,7 @@ List<String> userRole = new ArrayList<String>();
 		ConnectionUtils.closeQuietly(conn);
 		return users_arr;
 	}
-	
+
 	@Override
 	public ArrayList<RunFeeds1> getCurrentRuns(String project) throws SQLException, Exception {
 		ArrayList<RunFeeds1> cruns_arr = new ArrayList<RunFeeds1>();
@@ -392,14 +389,14 @@ List<String> userRole = new ArrayList<String>();
 			rf.setEnd_time(rs.getString(5));
 			cruns_arr.add(rf);
 		}	
-		
-		
+
+
 		ConnectionUtils.closeResultSet(rs);
 		ConnectionUtils.closePrepareStatement(pstm);
 		ConnectionUtils.closeQuietly(connection);
 		return cruns_arr;
 	}
-	
+
 	@Override
 	public ArrayList<RunFeeds1> getLastRuns(String project) throws SQLException, Exception {
 		ArrayList<RunFeeds1> lruns_arr = new ArrayList<RunFeeds1>();
@@ -420,14 +417,14 @@ List<String> userRole = new ArrayList<String>();
 			rf.setEnd_time(rs.getString(5));
 			lruns_arr.add(rf);
 		}	
-		
-		
+
+
 		ConnectionUtils.closeResultSet(rs);
 		ConnectionUtils.closePrepareStatement(pstm);
 		ConnectionUtils.closeQuietly(connection);
 		return lruns_arr;
 	}
-	
+
 	@Override
 	public ArrayList<RunFeeds1> getUpcomingRuns(String project) throws SQLException, Exception {
 		ArrayList<RunFeeds1> uruns_arr = new ArrayList<RunFeeds1>();
@@ -448,14 +445,14 @@ List<String> userRole = new ArrayList<String>();
 			rf.setEnd_time(rs.getString(5));
 			uruns_arr.add(rf);
 		}	
-		
-		
+
+
 		ConnectionUtils.closeResultSet(rs);
 		ConnectionUtils.closePrepareStatement(pstm);
 		ConnectionUtils.closeQuietly(connection);
 		return uruns_arr;
 	}
-	
+
 	@Override
 	public ArrayList<RunFeeds1> getFailedRuns(String project) throws SQLException, Exception {
 		ArrayList<RunFeeds1> fruns_arr = new ArrayList<RunFeeds1>();
@@ -469,17 +466,17 @@ List<String> userRole = new ArrayList<String>();
 		rs = pstm.executeQuery();
 		while (rs.next()) {
 			rf = new RunFeeds1();
-			
+
 			rf.setFeed_name(rs.getString(1));
 			rf.setExtract_date(rs.getString(2));
 			rf.setFeed_type(rs.getString(3));
 			rf.setRun_id(rs.getString(4));
 			rf.setStart_time(rs.getString(5));
-		
+
 			fruns_arr.add(rf);
 		}	
-		
-		
+
+
 		ConnectionUtils.closeResultSet(rs);
 		ConnectionUtils.closePrepareStatement(pstm);
 		ConnectionUtils.closeQuietly(connection);

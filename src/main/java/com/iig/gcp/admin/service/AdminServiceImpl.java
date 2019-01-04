@@ -26,13 +26,11 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Override
 	public String getUser(String user) throws Exception {
-		// TODO Auto-generated method stub
 		return admindao.getUser(user);
 	}
 	
 	@Override
 	public ArrayList<String> getAllUsers() throws Exception {
-		// TODO Auto-generated method stub
 		return admindao.getAllUsers();
 	}
 
@@ -59,13 +57,11 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public Project getProject(@Valid String projectId) throws Exception{
-		// TODO Auto-generated method stub
 		return admindao.getProject(projectId);
 	}
 
 	@Override
 	public String registerAddAdminAccess(int projectSeq, int user_sequence) throws Exception {
-		// TODO Auto-generated method stub
 		return admindao.registerAddAdminAccess(projectSeq,user_sequence);
 	}
 
