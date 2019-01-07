@@ -27,15 +27,11 @@
 	</properties>
 
 	<dependencies>
-	
-	
 	<dependency>
-	<groupId>com.juniper.logging</groupId>
-	<artifactId>logging</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+		<groupId>com.juniper.logging</groupId>
+		<artifactId>Juniper-Logging</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 	</dependency>
-	
-	
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
