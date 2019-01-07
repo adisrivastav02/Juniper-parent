@@ -29,7 +29,7 @@
 	<dependencies>
 	<dependency>
 		<groupId>com.juniper.logging</groupId>
-		<artifactId>Juniper-Logging</artifactId>
+		<artifactId>logging</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</dependency>
 		<dependency>
