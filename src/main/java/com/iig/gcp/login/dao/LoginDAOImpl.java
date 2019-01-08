@@ -186,7 +186,7 @@ public class LoginDAOImpl implements LoginDAO {
 			pstm.setInt(1, featureId);
 			ResultSet rs = pstm.executeQuery();
 			while(rs.next()){
-				menu_link = rs.getString(1);
+				/*menu_link = rs.getString(1);
 				menu_level = rs.getInt(2);
 				menu_name.add(rs.getString(3));
 				menu_levell.add(menu_level);
@@ -201,11 +201,17 @@ public class LoginDAOImpl implements LoginDAO {
 				else{
 					menu_code=menu_code+menu_link;
 				}
-				i++;
+				i++;*/
+				menu_link = rs.getString(1);
+				menu_level = rs.getInt(2);
+				menu_name.add(rs.getString(3));
+				menu_levell.add(menu_level);
+				
+				menu_code=menu_code+menu_link;
 			}
 		}
 		ConnectionUtils.closeQuietly(conn);
-		return menu_code=menu_code+"</ul></div></li>";
+		return menu_code;
 	}
 
 
@@ -256,7 +262,7 @@ public class LoginDAOImpl implements LoginDAO {
 			pstm.setInt(2, featureId);
 			ResultSet rs = pstm.executeQuery();
 			while(rs.next()){
-				menu_link = rs.getString(1);
+				/*menu_link = rs.getString(1);
 				menu_level = rs.getInt(2);
 				menu_name.add(rs.getString(3));
 				menu_levell.add(menu_level);
@@ -271,7 +277,13 @@ public class LoginDAOImpl implements LoginDAO {
 				else{
 					menu_code=menu_code+menu_link;
 				}
-				i++;
+				i++;*/
+				menu_link = rs.getString(1);
+				menu_level = rs.getInt(2);
+				menu_name.add(rs.getString(3));
+				menu_levell.add(menu_level);
+				
+				menu_code=menu_code+menu_link;
 			}
 		}
 		ConnectionUtils.closeQuietly(conn);

@@ -215,8 +215,8 @@
 						<option value="${arrProject.project_id}">${arrProject.project_id}</option>
 					</c:forEach>
 				</select>
-
         </div>
+        
         <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
@@ -295,7 +295,7 @@
             </a>
           </li>
 			<div id="menu">
-         		${menu_code}
+         		<li class="nav-item"> <a class="nav-link"  href="/login/extractionMS?user=${user.user_id}&project=${project}"> <span class="menu-title">Data Extraction</span> <i class="mdi mdi-database menu-icon"></i> </a> </li>
          	</div>	
         </ul>
       </nav>

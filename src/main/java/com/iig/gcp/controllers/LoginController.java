@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -99,17 +101,18 @@ public class LoginController {
 				return new ModelAndView("login/login");
 			}else {
 				ArrayList<Project> arrProject = loginService.getProjects(username);
+				modelMap.addAttribute("arrProject",arrProject);
 				modelMap.addAttribute("user",user);
-				HashMap<String,Integer> hsmap=new HashMap<String,Integer>();
+				/*HashMap<String,Integer> hsmap=new HashMap<String,Integer>();
 				for(Project project:arrProject ) {
 					hsmap.put(project.getProject_id(), project.getProject_sequence());
-				}
-				modelMap.addAttribute("arrProject",arrProject);
-				modelMap.addAttribute("projectFeatureMap", hsmap);
+				}*/
+				
+				/*modelMap.addAttribute("projectFeatureMap", hsmap);
 				String menu_code=loginService.getJAdminMenuCodes(user.getUser_sequence());
 				if(!menu_code.isEmpty()||!menu_code.contains("")){
 					modelMap.addAttribute("menu_code",menu_code);	
-				}
+				}*/
 			}
 
 		}catch(Exception e) {
@@ -134,6 +137,7 @@ public class LoginController {
 			UserAccount user = (UserAccount)request.getSession().getAttribute("user");
 			menu_code=loginService.getMenuCodes(user.getUser_sequence(),project);
 			modelMap.addAttribute("menu_code",menu_code);
+			System.out.println(menu_code);
 			modelMap.addAttribute("project",project);
 		}
 		catch(Exception e) {
@@ -152,5 +156,14 @@ public class LoginController {
 	public String logout(HttpServletRequest request) {
 		request.getSession().invalidate();
 		return "/login/login";
+	}
+	
+	
+	@RequestMapping(value = { "/login/extractionMS"}, method = RequestMethod.GET)
+	public ModelAndView extractionMS(@RequestParam String user,@RequestParam String project, ModelMap modelMap ,HttpServletRequest request) {
+		System.out.println(user);
+		System.out.println("project id--->"+project);
+		System.out.println("inside extraction controller");
+		return new ModelAndView("cdg_home");
 	}
 }
