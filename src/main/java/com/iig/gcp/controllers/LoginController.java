@@ -1,11 +1,14 @@
 package com.iig.gcp.controllers;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -136,8 +139,10 @@ public class LoginController {
 		try {
 			UserAccount user = (UserAccount)request.getSession().getAttribute("user");
 			menu_code=loginService.getMenuCodes(user.getUser_sequence(),project);
+			menu_code=menu_code.replaceAll("\\$\\{user.user_id\\}", user.getUser_id());
+			menu_code=menu_code.replaceAll("\\$\\{project\\}", project);
+			System.out.println("-->"+menu_code);
 			modelMap.addAttribute("menu_code",menu_code);
-			System.out.println(menu_code);
 			modelMap.addAttribute("project",project);
 		}
 		catch(Exception e) {
@@ -165,5 +170,18 @@ public class LoginController {
 		System.out.println("project id--->"+project);
 		System.out.println("inside extraction controller");
 		return new ModelAndView("cdg_home");
+	}
+	
+	@RequestMapping(value = { "/login/hipMS"}, method = RequestMethod.GET)
+	public ModelAndView hipMS( ModelMap modelMap ,HttpServletResponse response) throws IOException {
+		System.out.println("inside hip controller");
+		/*response.setContentType("text/json;charset=UTF-8");
+		response.setHeader("Location", "//localhost:5771");
+		response.setStatus(302);*/
+		JSONObject jsonObject= new JSONObject();
+		jsonObject.put("micro", "service");
+		//response.getWriter().write(jsonObject.toString());
+		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		return new ModelAndView("redirect:" + "//localhost:5771", modelMap);
 	}
 }
