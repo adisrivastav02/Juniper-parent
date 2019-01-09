@@ -184,4 +184,18 @@ public class LoginController {
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
 		return new ModelAndView("redirect:" + "//localhost:5771", modelMap);
 	}
+	
+	@RequestMapping(value = { "/login/adminMS"}, method = RequestMethod.GET)
+	public ModelAndView adminMS(@RequestParam String user,@RequestParam String project, ModelMap modelMap ,HttpServletResponse response) throws IOException {
+		System.out.println("inside hip controller user: "+user+" project: "+project);
+		/*response.setContentType("text/json;charset=UTF-8");
+		response.setHeader("Location", "//localhost:5771");
+		response.setStatus(302);*/
+		JSONObject jsonObject= new JSONObject();
+		jsonObject.put("user", user);
+		jsonObject.put("project", project);
+		//response.getWriter().write(jsonObject.toString());
+		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		return new ModelAndView("redirect:" + "//localhost:5772", modelMap);
+	}
 }
