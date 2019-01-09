@@ -212,7 +212,7 @@ Portfolio Section Start
                         <img src="${pageContext.request.contextPath}/documents/images/portfolio/dashboard.jpg" class="img-responsive" alt="this is a title" >
                         <div class="overlay">
                             <div class="buttons" align="center">
-                                <a rel="gallery" class="fancybox" href="${pageContext.request.contextPath}/hip">HIP Dashboards</a>
+                                <a rel="gallery" class="fancybox" href="/login/hipMS">HIP Dashboards</a>
                             </div>
                         </div>
                     </div>
