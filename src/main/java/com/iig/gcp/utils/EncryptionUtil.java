@@ -10,6 +10,7 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.iig.gcp.constants.OracleConstants;
@@ -17,6 +18,11 @@ import com.iig.gcp.constants.OracleConstants;
 @Component
 public class EncryptionUtil {
 	
+	@Value("${master.key.path}")
+	private static String masterKeyLocation;
+	public void setMasterKey(String value) {
+		this.masterKeyLocation=value;
+	}
 	
 	public static SecretKey decodeKeyFromString(String keyStr) {
 		/* Decodes a Base64 encoded String into a byte array */
@@ -80,7 +86,7 @@ public class EncryptionUtil {
 	
 	public static String decyptPassword(byte[] encrypted_key, byte[] encrypted_password) throws Exception {
 		
-		String content = readFile(OracleConstants.masterKeyLocation);
+		String content = readFile(masterKeyLocation);
 		SecretKey secKey = decodeKeyFromString(content);
 		String decrypted_key=decryptText(encrypted_key,secKey);
 		SecretKey secKey2 = decodeKeyFromString(decrypted_key);
