@@ -27,11 +27,26 @@
 	</properties>
 
 	<dependencies>
-	<dependency>
-		<groupId>com.juniper.logging</groupId>
-		<artifactId>logging</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</dependency>
+		<!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
+<dependency>
+    <groupId>com.auth0</groupId>
+    <artifactId>java-jwt</artifactId>
+    <version>3.4.0</version>
+</dependency>
+
+
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt</artifactId>
+    <version>0.2</version>
+</dependency>
+
+
+		<dependency>
+			<groupId>com.juniper.logging</groupId>
+			<artifactId>logging</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

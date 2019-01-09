@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class ConnectionUtils {
 
 	public static Connection getConnection() 
-			throws ClassNotFoundException, SQLException {
+			throws ClassNotFoundException, SQLException,Exception {
 
 		return OracleConnUtils.getOracleConnection();
 	}

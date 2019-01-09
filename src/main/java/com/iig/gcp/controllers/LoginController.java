@@ -3,6 +3,7 @@ package com.iig.gcp.controllers;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +25,7 @@ import com.iig.gcp.login.dto.Project;
 import com.iig.gcp.login.dto.RunFeeds1;
 import com.iig.gcp.login.dto.UserAccount;
 import com.iig.gcp.login.service.LoginService;
+import com.iig.gcp.utils.EncryptionUtil;
 
 
 
@@ -30,12 +33,18 @@ import com.iig.gcp.login.service.LoginService;
 @SessionAttributes(value= {"user","arrProject","menu_code","project","projectFeatureMap"})
 public class LoginController {
 
-
+	private static String oracle_pwd;
+	@Value("${oracle.encrypt.pwd}")
+	public void setPassword(String value) {
+		this.oracle_pwd=value;
+	}
+	
 	@Autowired
 	LoginService loginService;
 
 	@RequestMapping(value = { "/"}, method = RequestMethod.GET)
-	public String homePage() {
+	public String homePage() throws Exception {
+		
 		return "/index";
 	}
 

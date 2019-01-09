@@ -26,25 +26,34 @@ public class OracleConnUtils {
 		this.oracle_jdbc_url=value;
 	}
 	
-	
 	private static String oracle_user_name;
 	@Value("${oracle.user.name}")
 	public void setDBName(String value) {
 		this.oracle_user_name=value;
 	}
 	
-	
-	private static String oracle_pwd;
-	@Value("${oracle.password}")
+	private static String oracle_decrypt_pwd;
+	@Value("${oracle.encrypt.pwd}")
 	public void setPassword(String value) {
-		this.oracle_pwd=value;
+		this.oracle_decrypt_pwd=value;
 	}
 	
-	public static Connection getOracleConnection() throws ClassNotFoundException, SQLException {
+	private static String master_key_path;
+	@Value("${master.key.path}")
+	public void setMasterKeyPath(String value) {
+		this.master_key_path=value;
+	}
+	
+	public static Connection getOracleConnection() throws ClassNotFoundException, SQLException,Exception {
 		Class.forName(OracleConstants.ORACLE_DRIVER);
+		System.out.println("url: "+oracle_jdbc_url+"user: "+oracle_user_name+" decyt pwd: "+oracle_decrypt_pwd+"master_key_path"+master_key_path);
+		
+		String content = EncryptionUtil.readFile(master_key_path);
 		String connectionUrl = oracle_jdbc_url.replaceAll("#orcl_ip", oracle_ip_port);
+		byte[] base_pwd=org.apache.commons.codec.binary.Base64.decodeBase64(oracle_decrypt_pwd);
+		String orcl_decoded_pwd=EncryptionUtil.decryptText(base_pwd, EncryptionUtil.decodeKeyFromString(content));
 		Connection conn = DriverManager.getConnection(connectionUrl, oracle_user_name,
-				oracle_pwd);
+				orcl_decoded_pwd);
 		return conn;
 	}
 

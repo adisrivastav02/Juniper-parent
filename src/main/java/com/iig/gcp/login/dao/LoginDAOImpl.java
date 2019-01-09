@@ -166,11 +166,10 @@ public class LoginDAOImpl implements LoginDAO {
 	 * @param user_sequence
 	 * @param project
 	 * @return
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
+	 * @throws ClassNotFoundException, SQLException,Exception 
 	 */
 	@Override
-	public String getMenuCodes(int user_sequence,String project) throws ClassNotFoundException, SQLException {
+	public String getMenuCodes(int user_sequence,String project) throws ClassNotFoundException, SQLException,Exception {
 		String menu_code="";
 		String menu_link=null;
 		List<String> menu_name=new ArrayList<String>();
@@ -238,9 +237,10 @@ public class LoginDAOImpl implements LoginDAO {
 
 	/**
 	 * This method check if user belongs to JAdmin, if yes he will be given JAdmin features.
+	 * @throws ClassNotFoundException, SQLException,Exception 
 	 */
 	@Override
-	public String getJAdminMenuCodes(int user_sequence) throws ClassNotFoundException, SQLException {
+	public String getJAdminMenuCodes(int user_sequence) throws ClassNotFoundException, SQLException,Exception {
 		String menu_code="";
 		String menu_link=null;
 		List<String> menu_name=new ArrayList<String>();
