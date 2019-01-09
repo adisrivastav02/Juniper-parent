@@ -21,6 +21,7 @@ public class UserAccount implements Serializable {
 	private String is_admin;
 	private String user_fullname;
 	private String user_email;
+	private String jwt_token;
 	
 	
 	public String getUser_id() {
@@ -88,6 +89,12 @@ public class UserAccount implements Serializable {
 	}
 	public void setUser_email(String user_email) {
 		this.user_email = user_email;
+	}
+	public String getJwt_token() {
+		return jwt_token;
+	}
+	public void setJwt_token(String jwt_token) {
+		this.jwt_token = jwt_token;
 	}
 	
 	

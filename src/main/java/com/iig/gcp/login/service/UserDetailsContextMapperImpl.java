@@ -1,6 +1,7 @@
 package com.iig.gcp.login.service;
 
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,10 +18,24 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iig.gcp.AppRole;
 import com.iig.gcp.login.dto.UserAccount;
 
+import io.jsonwebtoken.Jwts;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+
+import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+
 @Service
 @Transactional
 public class UserDetailsContextMapperImpl implements UserDetailsContextMapper {
 
+	public static final long EXPIRATION_TIME = 864_000_000;
+	
+	public static final String SECRET = "SecretKeyToGenJWTs";
+	
+	
 	@Autowired
 	private LoginService loginService;
 	
@@ -29,8 +44,16 @@ public class UserDetailsContextMapperImpl implements UserDetailsContextMapper {
 			Collection<? extends GrantedAuthority> arg2) {
 		UserAccount arrUserAccount= null;
 		List<String> userRoles = null;
+		String token = null;
 		try {
 			arrUserAccount= loginService.findUserFromId(arg1);
+			 token = JWT.create()
+	                .withSubject(arg1)
+	                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+	                .sign(HMAC512(SECRET.getBytes()));
+			 System.out.println(token);
+			 arrUserAccount.setJwt_token(token);
+			 
 		} catch (Exception e) {
 			e.printStackTrace();
 			arrUserAccount = new UserAccount();
@@ -47,6 +70,7 @@ public class UserDetailsContextMapperImpl implements UserDetailsContextMapper {
 		
 		return new UserDetailsImpl(arrUserAccount,userRoles);
 	}
+	
 
 	@Override
 	public void mapUserToContext(UserDetails arg0, DirContextAdapter arg1) {

@@ -42,7 +42,7 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return null;
+		return this.user.getJwt_token();
 	}
 
 	@Override
