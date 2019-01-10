@@ -100,9 +100,10 @@
 		 $("#projects").change(function() {
 
 				var project = $(this).val();
-	
+				var jwt= document.getElementById('jwt').value;
 				 $.post('${pageContext.request.contextPath}/login/features', {
-					project : project
+					project : project,
+					jwt : jwt
 				}, function(data) {
 					//alert(data);
 					
@@ -216,7 +217,7 @@
 					</c:forEach>
 				</select>
         </div>
-        
+        <input type="hidden" id="jwt" name="jwt" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.getPassword()}"/>
         <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">

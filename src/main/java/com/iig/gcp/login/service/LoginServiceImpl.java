@@ -42,12 +42,12 @@ public class LoginServiceImpl implements LoginService{
 	}
 
 	@Override
-	public String getMenuCodes(int user_sequence,String project) throws ClassNotFoundException, SQLException {
+	public String getMenuCodes(int user_sequence,String project) throws ClassNotFoundException, SQLException, Exception {
 		return loginDAO.getMenuCodes(user_sequence,project);
 	}
 
 	@Override
-	public String getJAdminMenuCodes(int user_sequence) throws ClassNotFoundException, SQLException {
+	public String getJAdminMenuCodes(int user_sequence) throws ClassNotFoundException, SQLException, Exception {
 		return loginDAO.getJAdminMenuCodes(user_sequence);
 	}
 	

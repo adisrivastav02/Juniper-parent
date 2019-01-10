@@ -1,10 +1,13 @@
 package com.iig.gcp.controllers;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Base64;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,20 +15,26 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.iig.gcp.login.dto.Project;
 import com.iig.gcp.login.dto.RunFeeds1;
 import com.iig.gcp.login.dto.UserAccount;
 import com.iig.gcp.login.service.LoginService;
-import com.iig.gcp.utils.EncryptionUtil;
 
 
 
@@ -143,14 +152,14 @@ public class LoginController {
 	 * @return
 	 */
 	@RequestMapping(value = { "/login/features"}, method = RequestMethod.POST)
-	public ModelAndView getFeatures(String project,ModelMap modelMap ,HttpServletRequest request) {
+	public ModelAndView getFeatures(String project,String jwt,ModelMap modelMap ,HttpServletRequest request) {
 		String menu_code=null;
 		try {
 			UserAccount user = (UserAccount)request.getSession().getAttribute("user");
 			menu_code=loginService.getMenuCodes(user.getUser_sequence(),project);
 			menu_code=menu_code.replaceAll("\\$\\{user.user_id\\}", user.getUser_id());
 			menu_code=menu_code.replaceAll("\\$\\{project\\}", project);
-			System.out.println("-->"+menu_code);
+			menu_code=menu_code.replaceAll("\\$\\{jwt\\}", jwt);
 			modelMap.addAttribute("menu_code",menu_code);
 			modelMap.addAttribute("project",project);
 		}
@@ -173,12 +182,73 @@ public class LoginController {
 	}
 	
 	
+	/*@RequestMapping(value = { "/login/extractionMS"}, method = RequestMethod.GET)
+	public ResponseEntity<Map<String, Object>> extractionMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException, URISyntaxException {
+		JSONObject jsonObject= new JSONObject();
+		jsonObject.put("user", user);
+		jsonObject.put("project", project);
+		response.setContentType("text/json;charset=UTF-8");
+		System.out.println("========="+jwt);
+		response.setHeader("jwt", jwt);
+		response.setStatus(302);
+		System.out.println(response.getHeader("jwt"));
+		response.sendRedirect("//localhost:5771");
+		Map<String, Object> message = new HashMap<String, Object>();
+		message.put("summary", "Authenticated successfully.");
+		message.put("success", true);
+		
+		org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+		headers.put("jwt", Arrays.asList("abc"));
+		headers.setLocation(new URI("//localhost:5771"));
+		System.out.println(headers.getValuesAsList("jwt"));
+		return new ResponseEntity<Map<String, Object>>(message,headers,HttpStatus.MOVED_PERMANENTLY);
+		//return "redirect://localhost:5771/";
+		
+		return ResponseEntity.status(HttpStatus.CREATED).
+				header("jwt", jwt).
+				body(jsonObject);
+		//response.getWriter().write(jsonObject.toString());
+		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		return new ModelAndView("redirect:" + "//localhost:5772", modelMap);
+	}*/
+	
 	@RequestMapping(value = { "/login/extractionMS"}, method = RequestMethod.GET)
-	public ModelAndView extractionMS(@RequestParam String user,@RequestParam String project, ModelMap modelMap ,HttpServletRequest request) {
-		System.out.println(user);
-		System.out.println("project id--->"+project);
-		System.out.println("inside extraction controller");
-		return new ModelAndView("cdg_home");
+	public ResponseEntity<Object>  extractionMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap , HttpServletResponse httpServletResponse) throws IOException {
+		JSONObject jsonObject= new JSONObject();
+		jsonObject.put("user", user);
+		jsonObject.put("project", project);
+		jsonObject.put("jwt", jwt);
+		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		
+		
+		/*RestTemplate restTemplate = new RestTemplate();
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.set("Authorization", jwt);
+		String url = "http://localhost:5771";
+		HttpEntity<String> entity = new HttpEntity<String>("POST",headers);
+		String response = restTemplate.postForObject(url, entity, String.class);*/
+		//httpServletResponse.setHeader("Authorization", jwt);
+		//return new ModelAndView("redirect:" + "//localhost:5771", modelMap);
+		
+		/*RedirectView redirectView = new RedirectView();
+		String url = "http://localhost:5771";
+		redirectView.setUrl(url);
+		return redirectView;*/
+		
+		URI uri = null;
+		try {
+			uri = new URI("http://localhost:5771");
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    HttpHeaders httpHeaders = new HttpHeaders();
+	    httpHeaders.setLocation(uri);
+	    httpHeaders.add("Authorization", jwt);
+	    httpHeaders.add("head", "123");
+	    return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
 	}
 	
 	@RequestMapping(value = { "/login/hipMS"}, method = RequestMethod.GET)
@@ -195,7 +265,7 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = { "/login/adminMS"}, method = RequestMethod.GET)
-	public ModelAndView adminMS(@RequestParam String user,@RequestParam String project, ModelMap modelMap ,HttpServletResponse response) throws IOException {
+	public ModelAndView adminMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException {
 		System.out.println("inside hip controller user: "+user+" project: "+project);
 		/*response.setContentType("text/json;charset=UTF-8");
 		response.setHeader("Location", "//localhost:5771");

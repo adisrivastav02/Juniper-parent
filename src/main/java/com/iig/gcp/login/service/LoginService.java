@@ -21,8 +21,8 @@ List<String> findUserRoles(String user_id) throws Exception;
 ArrayList<Project> getProjects(String username)throws Exception;
 
 //Feature
-String getMenuCodes(int user_sequence, String project) throws ClassNotFoundException, SQLException;
-String getJAdminMenuCodes(int user_sequence) throws ClassNotFoundException, SQLException;
+String getMenuCodes(int user_sequence, String project) throws ClassNotFoundException, SQLException, Exception;
+String getJAdminMenuCodes(int user_sequence) throws ClassNotFoundException, SQLException, Exception;
 
 //Project Dashboard
 ArrayList<RunFeeds1> getProjectFeeds(String project) throws Exception;

@@ -46,7 +46,6 @@ public class OracleConnUtils {
 	
 	public static Connection getOracleConnection() throws ClassNotFoundException, SQLException,Exception {
 		Class.forName(OracleConstants.ORACLE_DRIVER);
-		System.out.println("url: "+oracle_jdbc_url+"user: "+oracle_user_name+" decyt pwd: "+oracle_decrypt_pwd+"master_key_path"+master_key_path);
 		
 		String content = EncryptionUtil.readFile(master_key_path);
 		String connectionUrl = oracle_jdbc_url.replaceAll("#orcl_ip", oracle_ip_port);
