@@ -28,19 +28,17 @@
 
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
-<dependency>
-    <groupId>com.auth0</groupId>
-    <artifactId>java-jwt</artifactId>
-    <version>3.4.0</version>
-</dependency>
+		<dependency>
+			<groupId>com.auth0</groupId>
+			<artifactId>java-jwt</artifactId>
+			<version>3.4.0</version>
+		</dependency>
 
-
-<dependency>
-    <groupId>io.jsonwebtoken</groupId>
-    <artifactId>jjwt</artifactId>
-    <version>0.2</version>
-</dependency>
-
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.2</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.juniper.logging</groupId>
@@ -121,7 +119,7 @@
 			<artifactId>httpclient</artifactId>
 			<!-- <version>4.5.5</version> -->
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
 		<!-- Apache Commons IO -->
 		<dependency>

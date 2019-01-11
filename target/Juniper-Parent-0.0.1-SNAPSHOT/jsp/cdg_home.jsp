@@ -5,6 +5,7 @@
             <div class="col-md-4 stretch-card grid-margin">
               <div class="card bg-gradient-primary card-img-holder text-white">
                 <div class="card-body">
+                
                   <img src="${pageContext.request.contextPath}/assets/img/circle.svg" class="card-img-absolute" alt="circle-image"/>
                   <h2 class="font-weight-normal mb-3">Data Extraction</h2>
                   <h4>Add Metadata</h4>
