@@ -3,6 +3,9 @@
  <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/multi.min.css">
+<link href="${pageContext.request.contextPath}/assets/css/bootstrap-table.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/assets/css/pagination.css" rel="stylesheet">
+<script src="${pageContext.request.contextPath}/assets/js/bootstrap-table.min.js"></script>
 
 <div class="main-panel">
 	<div class="content-wrapper">
@@ -51,19 +54,22 @@
 	
 
 			<br><br>
+			<p class="card-description">Current Feed Runs</p>
 			<div class="row">
-				<p class="card-description">Current Feed Runs</p>
-			<table id="dashboard1" 
-			class="table table-hover table-striped table-bordered shadow p-3 mb-5 bg-white rounded "
+			 
+			  <div class="col-md-12">
+			<table id="tbl_dashboard" 
+			class="table table-hover table-sm table-striped table-bordered shadow p-3 mb-5 bg-white rounded table-condensed"
 			data-show-header="true"
-			data-classes="table table-hover table-striped table-bordered shadow p-3 mb-5 bg-white rounded "
-			 data-toggle="table"  
+			data-classes="table table-hover table-striped table-sm table-bordered shadow p-3 mb-5 bg-white rounded table-condensed" 
+			data-toggle="table"  
 			data-striped="true"
+		    data-sort-name="Feed Id"
 		    data-sort-order="desc"
 		   	data-pagination="true"  
-		   	data-id-field="name2" 
+		   	data-id-field="name" 
 		   	data-page-size="5"
-		   	data-page-list="[5, 10, 25, 50, 100, ALL] " > 
+		   	data-page-list="[5, 10, 25, 50, 100, ALL]" >
 	             <thead>
 	              <tr>
 	              <th data-sortable="true" onclick="myFunction(this)"  >
@@ -99,22 +105,28 @@
                                
                 </tbody>
         	</table>
+        	</div>
+        	 
  </div>       	
 			<br><br>
 			
-<div class="row">
+
 				<p class="card-description">Last Feed Runs</p>
-			<table id="dashboard1" 
-			class="table table-hover table-striped table-bordered shadow p-3 mb-5 bg-white rounded "
+			<div class="row">
+			
+			  <div class="col-md-12">
+			<table id="tbl_dashboard" 
+			class="table table-hover table-sm table-striped table-bordered shadow p-3 mb-5 bg-white rounded table-condensed"
 			data-show-header="true"
-			data-classes="table table-hover table-striped table-bordered shadow p-3 mb-5 bg-white rounded "
-			 data-toggle="table"  
+			data-classes="table table-hover table-striped table-sm table-bordered shadow p-3 mb-5 bg-white rounded table-condensed" 
+			data-toggle="table"  
 			data-striped="true"
+		    data-sort-name="Feed Id"
 		    data-sort-order="desc"
 		   	data-pagination="true"  
-		   	data-id-field="name2" 
+		   	data-id-field="name" 
 		   	data-page-size="5"
-		   	data-page-list="[5, 10, 25, 50, 100, ALL] " > 
+		   	data-page-list="[5, 10, 25, 50, 100, ALL]" >
 	             <thead>
 	              <tr>
 	              <th data-sortable="true" onclick="myFunction(this)"  >
@@ -149,22 +161,26 @@
                                
                 </tbody>
         	</table>
- </div>       	
+        	</div>
+			 </div>       	
 			<br><br>
-<div class="row">
-				<p class="card-description">Upcoming Feed Runs</p>
 
-			<table id="dashboard1" 
-			class="table table-hover table-striped table-bordered shadow p-3 mb-5 bg-white rounded "
+				<p class="card-description">Upcoming Feed Runs</p>
+			<div class="row">
+			
+			  <div class="col-md-12">
+			<table id="tbl_dashboard" 
+			class="table table-hover table-sm table-striped table-bordered shadow p-3 mb-5 bg-white rounded table-condensed"
 			data-show-header="true"
-			data-classes="table table-hover table-striped table-bordered shadow p-3 mb-5 bg-white rounded "
-			 data-toggle="table"  
+			data-classes="table table-hover table-striped table-sm table-bordered shadow p-3 mb-5 bg-white rounded table-condensed" 
+			data-toggle="table"  
 			data-striped="true"
+		    data-sort-name="Feed Id"
 		    data-sort-order="desc"
 		   	data-pagination="true"  
-		   	data-id-field="name2" 
+		   	data-id-field="name" 
 		   	data-page-size="5"
-		   	data-page-list="[5, 10, 25, 50, 100, ALL] " > 
+		   	data-page-list="[5, 10, 25, 50, 100, ALL]" >
 	             <thead>
 	              <tr>
 	              <th data-sortable="true" onclick="myFunction(this)"  >
@@ -197,21 +213,26 @@
                 </tbody>
         	</table>
         	</div>
+        	
+			     	</div>
 			<br><br>
-<div class="row">
+
 				<p class="card-description">Failures</p>
+			<div class="row">
 			
-			<table id="dashboard1" 
-			class="table table-hover table-striped table-bordered shadow p-3 mb-5 bg-white rounded "
+			  <div class="col-md-12">
+			<table id="tbl_dashboard" 
+			class="table table-hover table-sm table-striped table-bordered shadow p-3 mb-5 bg-white rounded table-condensed"
 			data-show-header="true"
-			data-classes="table table-hover table-striped table-bordered shadow p-3 mb-5 bg-white rounded "
-			 data-toggle="table"  
+			data-classes="table table-hover table-striped table-sm table-bordered shadow p-3 mb-5 bg-white rounded table-condensed" 
+			data-toggle="table"  
 			data-striped="true"
+		    data-sort-name="Feed Id"
 		    data-sort-order="desc"
 		   	data-pagination="true"  
-		   	data-id-field="name2" 
+		   	data-id-field="name" 
 		   	data-page-size="5"
-		   	data-page-list="[5, 10, 25, 50, 100, ALL] " > 
+		   	data-page-list="[5, 10, 25, 50, 100, ALL]" >
 	             <thead>
 	              <tr>
 	              <th data-sortable="true" onclick="myFunction(this)"  >
@@ -247,21 +268,28 @@
         	</table>
         	</div>
         	
+			 
+        	</div>
+        	
         	<br><br>
-			<div class="row" id="fd" class="section">
-				<p class="card-description">Feeds Registered</p>
 			
-			<table id="ft" 
-			class="table table-hover table-striped table-bordered shadow p-3 mb-5 bg-white rounded "
+				<p class="card-description">Feeds Registered</p>
+			<div class="row" id="fd" class="section">
+			<div class="col-md-1">
+			 </div>
+			  <div class="col-md-10">
+			<table id="tbl_dashboard" 
+			class="table table-hover table-sm table-striped table-bordered shadow p-3 mb-5 bg-white rounded table-condensed"
 			data-show-header="true"
-			data-classes="table table-hover table-striped table-bordered shadow p-3 mb-5 bg-white rounded "
-			 data-toggle="table"  
+			data-classes="table table-hover table-striped table-sm table-bordered shadow p-3 mb-5 bg-white rounded table-condensed" 
+			data-toggle="table"  
 			data-striped="true"
+		    data-sort-name="Feed Id"
 		    data-sort-order="desc"
 		   	data-pagination="true"  
-		   	data-id-field="name2" 
-		   	data-page-size="5" 
-		   	data-page-list="[5, 10, 25, 50, 100, ALL] " > 
+		   	data-id-field="name" 
+		   	data-page-size="5"
+		   	data-page-list="[5, 10, 25, 50, 100, ALL]" >
 	             <thead>
 	              <tr>
 	              <th data-sortable="true" onclick="myFunction(this)"  >
@@ -284,22 +312,32 @@
                                
                 </tbody>
         	</table>
+        	</div>
+        	<div class="col-md-1">
+			 </div>
+			
         	
  </div>       	
  <br><br>
-			<div class="row" id="ud" class="section">
+			<br>
+			
 				<p class="card-description">Users Registered</p>
-			<table id="ut" 
-			class="table table-hover table-striped table-bordered shadow p-3 mb-5 bg-white rounded "
+			<div class="row" id="ud" class="section">
+			<div class="col-md-1">
+			 </div>
+			  <div class="col-md-10">
+			<table id="tbl_dashboard" 
+			class="table table-hover table-sm table-striped table-bordered shadow p-3 mb-5 bg-white rounded table-condensed"
 			data-show-header="true"
-			data-classes="table table-hover table-striped table-bordered shadow p-3 mb-5 bg-white rounded "
-			 data-toggle="table"  
+			data-classes="table table-hover table-striped table-sm table-bordered shadow p-3 mb-5 bg-white rounded table-condensed" 
+			data-toggle="table"  
 			data-striped="true"
+		    data-sort-name="Feed Id"
 		    data-sort-order="desc"
 		   	data-pagination="true"  
-		   	data-id-field="name2" 
+		   	data-id-field="name" 
 		   	data-page-size="5"
-		   	data-page-list="[5, 10, 25, 50, 100, ALL] " > 
+		   	data-page-list="[5, 10, 25, 50, 100, ALL]" >
 	             <thead>
 	              <tr>
 	              <th data-sortable="true" onclick="myFunction(this)"  >
@@ -325,6 +363,10 @@
                                
                 </tbody>
         	</table>
+        	</div>
+        	<div class="col-md-1">
+			 </div>
+			
  </div>       	
         	
  	</div>

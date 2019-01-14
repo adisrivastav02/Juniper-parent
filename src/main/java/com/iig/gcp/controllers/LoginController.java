@@ -273,8 +273,24 @@ public class LoginController {
 		JSONObject jsonObject= new JSONObject();
 		jsonObject.put("user", user);
 		jsonObject.put("project", project);
+		jsonObject.put("jwt", jwt);
 		//response.getWriter().write(jsonObject.toString());
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
 		return new ModelAndView("redirect:" + "//localhost:5772", modelMap);
+	}
+	
+	@RequestMapping(value = { "/login/schedulerMS"}, method = RequestMethod.GET)
+	public ModelAndView schedulerMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException {
+		System.out.println("inside hip controller user: "+user+" project: "+project);
+		/*response.setContentType("text/json;charset=UTF-8");
+		response.setHeader("Location", "//localhost:5771");
+		response.setStatus(302);*/
+		JSONObject jsonObject= new JSONObject();
+		jsonObject.put("user", user);
+		jsonObject.put("project", project);
+		jsonObject.put("jwt", jwt);
+		//response.getWriter().write(jsonObject.toString());
+		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		return new ModelAndView("redirect:" + "//localhost:5773", modelMap);
 	}
 }
