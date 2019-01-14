@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -213,42 +215,32 @@ public class LoginController {
 	}*/
 	
 	@RequestMapping(value = { "/login/extractionMS"}, method = RequestMethod.GET)
-	public ResponseEntity<Object>  extractionMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap , HttpServletResponse httpServletResponse) throws IOException {
+	public ModelAndView  extractionMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt,ModelMap modelMap ) throws IOException {
+		
+		modelMap.addAttribute("usr",user.toString());
+		modelMap.addAttribute("proj",project);
+		modelMap.addAttribute("jwt",jwt);
+		return new ModelAndView("ConnectionHome");
+	}
+	
+	@RequestMapping(value = { "/login/connectionDetails"}, method = RequestMethod.POST)
+	public ModelAndView  connectionDetails(@Valid @ModelAttribute("src_val") String src_val,@Valid @ModelAttribute("usr") String userId,@Valid @ModelAttribute("proj") String project,@Valid @ModelAttribute("jwt") String jwt, ModelMap modelMap , HttpServletResponse httpServletResponse) throws IOException {
+		System.out.println("in connection controller");
 		JSONObject jsonObject= new JSONObject();
-		jsonObject.put("user", user);
+		System.out.println("user->"+userId+" proj-->"+project+" jwt-->"+jwt);
+		jsonObject.put("userId", userId.toString());
 		jsonObject.put("project", project);
 		jsonObject.put("jwt", jwt);
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
-		
-		
-		/*RestTemplate restTemplate = new RestTemplate();
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Authorization", jwt);
-		String url = "http://localhost:5771";
-		HttpEntity<String> entity = new HttpEntity<String>("POST",headers);
-		String response = restTemplate.postForObject(url, entity, String.class);*/
-		//httpServletResponse.setHeader("Authorization", jwt);
-		//return new ModelAndView("redirect:" + "//localhost:5771", modelMap);
-		
-		/*RedirectView redirectView = new RedirectView();
-		String url = "http://localhost:5771";
-		redirectView.setUrl(url);
-		return redirectView;*/
-		
-		URI uri = null;
-		try {
-			uri = new URI("http://localhost:5771");
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(src_val.equalsIgnoreCase("oracle"))
+		{
+			return new ModelAndView("redirect://localhost:5000",modelMap);
 		}
-	    HttpHeaders httpHeaders = new HttpHeaders();
-	    httpHeaders.setLocation(uri);
-	    httpHeaders.add("Authorization", jwt);
-	    httpHeaders.add("head", "123");
-	    return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
+		else if(src_val.equalsIgnoreCase("Unix"))
+		{
+			return new ModelAndView("redirect://localhost:5001",modelMap);
+		} else
+			return new ModelAndView("redirect://localhost:5001",modelMap);
 	}
 	
 	@RequestMapping(value = { "/login/hipMS"}, method = RequestMethod.GET)

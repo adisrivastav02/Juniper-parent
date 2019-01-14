@@ -3,6 +3,9 @@
 <script>
 	function pass(val) {
 		document.getElementById('src_val').value = val;
+		var usr=document.getElementById('usr').value;
+		var proj=document.getElementById('proj').value;
+		var jwt=document.getElementById('jwt').value;
 		document.getElementById('ConnectionHome').submit();
 	}
 </script>
@@ -16,8 +19,11 @@
 						<h4 class="card-title">Data Extraction</h4>
 						<p class="card-description">Connection Details</p>
 						<form class="forms-sample" id="ConnectionHome" name="ConnectionHome"
-							method="post" action="${pageContext.request.contextPath}/extraction/ConnectionDetails">
+							method="post" action="${pageContext.request.contextPath}/login/connectionDetails">
 							<input type="hidden" name="src_val" id="src_val" value="">
+							<input type="hidden" name="usr" id="usr" value="${usr}">
+							<input type="hidden" name="proj" id="proj" value="${proj}">
+							<input type="hidden" name="jwt" id="jwt" value="${jwt}">
 						<div class="container">
 								  <div class="row text-center text-lg-left">
 									 <div class="thumbnail col-lg-3 col-md-4 col-xs-6">

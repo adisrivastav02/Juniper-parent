@@ -279,7 +279,7 @@
 			    <c:when test="${user.user_id=='abhishek'}"><img src="${pageContext.request.contextPath}/assets/img/faces/face.png" alt="image"></c:when>
 			    <c:when test="${user.user_id=='test'}"><img src="${pageContext.request.contextPath}/assets/img/faces/face.png" alt="image"></c:when>
 			    <c:otherwise><img src="${pageContext.request.contextPath}/assets/img/faces/face.png" alt="image"></c:otherwise>
-			</c:choose>
+				</c:choose>
                 <span class="login-status online"></span> <!--change to offline or busy as needed-->              
               </div>
               <div class="nav-profile-text d-flex flex-column">
