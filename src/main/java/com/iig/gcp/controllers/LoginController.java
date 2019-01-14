@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -224,8 +225,15 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = { "/login/connectionDetails"}, method = RequestMethod.POST)
-	public ModelAndView  connectionDetails(@Valid @ModelAttribute("src_val") String src_val,@Valid @ModelAttribute("usr") String userId,@Valid @ModelAttribute("proj") String project,@Valid @ModelAttribute("jwt") String jwt, ModelMap modelMap , HttpServletResponse httpServletResponse) throws IOException {
+	public ModelAndView  connectionDetails(@Valid @ModelAttribute("src_val") String src_val,@Valid @ModelAttribute("usr") String userId,@Valid @ModelAttribute("proj") String project,@Valid @ModelAttribute("jwt") String jwt, ModelMap modelMap,HttpServletRequest request) throws ClassNotFoundException, SQLException, Exception {
 		System.out.println("in connection controller");
+		UserAccount user = (UserAccount)request.getSession().getAttribute("user");
+		String menu_code=loginService.getMenuCodes(user.getUser_sequence(),project);
+		menu_code=menu_code.replaceAll("\\$\\{user.user_id\\}", user.getUser_id());
+		menu_code=menu_code.replaceAll("\\$\\{project\\}", project);
+		menu_code=menu_code.replaceAll("\\$\\{jwt\\}", jwt);
+		modelMap.addAttribute("menu_code",menu_code);
+		modelMap.addAttribute("project",project);
 		JSONObject jsonObject= new JSONObject();
 		System.out.println("user->"+userId+" proj-->"+project+" jwt-->"+jwt);
 		jsonObject.put("userId", userId.toString());
