@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,6 +38,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.iig.gcp.CustomAuthenticationProvider;
 import com.iig.gcp.login.dto.Project;
 import com.iig.gcp.login.dto.RunFeeds1;
 import com.iig.gcp.login.dto.UserAccount;
@@ -44,6 +50,23 @@ import com.iig.gcp.login.service.LoginService;
 @SessionAttributes(value= {"user","arrProject","menu_code","project","projectFeatureMap"})
 public class LoginController {
 
+	
+	@Autowired
+    private CustomAuthenticationProvider authenticationManager;
+	
+	@Value( "${oracle.front.micro.services}" )
+	private String oracle_front_micro_services;
+	
+	@Value( "${unix.front.micro.services}" )
+	private String unix_front_micro_services;
+	
+	@Value( "${admin.front.micro.services}" )
+	private String admin_front_micro_services;
+	
+	@Value( "${hip.front.micro.services}" )
+	private String hip_front_micro_services;
+	
+	
 	private static String oracle_pwd;
 	@Value("${oracle.encrypt.pwd}")
 	public void setPassword(String value) {
@@ -77,6 +100,100 @@ public class LoginController {
 		return "accessDenied";
 	}
 
+	
+	@RequestMapping(value = { "/fromChild"}, method = RequestMethod.GET)
+	public ModelAndView unixExtractionHome(@Valid @ModelAttribute("jsonObject") String jsonObject, ModelMap modelMap,HttpServletRequest request) throws Exception {
+		
+		//Validate the token at the first place
+		JSONObject jsonModelObject = null;
+		try {
+		
+		if(jsonObject == null || jsonObject.equals("")) {
+			//TODO: Redirect to Access Denied Page
+			return new ModelAndView("/login");
+		}
+		jsonModelObject = new JSONObject( jsonObject);
+		authenticationByJWT("jwt", jsonModelObject.get("jwt").toString());
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return new ModelAndView("/login");
+			//redirect to Login Page
+		}
+		
+		request.getSession().setAttribute("project", jsonModelObject.get("project"));
+		
+		modelMap.addAttribute("user_id", jsonModelObject.get("userId"));
+		
+		boolean flag=false;
+		UserAccount user=null;
+		try {
+			ArrayList<UserAccount> arrUserAccount= loginService.getUserAccount();
+			for(int i=0;i<arrUserAccount.size();i++) {
+				user=arrUserAccount.get(i);
+				if(user.getUser_id().equals(jsonModelObject.get("userId"))) {
+					/*if(user.getUser_pass().equals(password)) {
+
+				}*/
+					flag=true;
+					break;
+
+				}
+			}
+
+			if(!flag) {
+				modelMap.addAttribute("errorString","Please Raise GSR to Access Juniper");
+				return new ModelAndView("login/login");
+			}else {
+				ArrayList<Project> arrProject = loginService.getProjects(jsonModelObject.get("userId").toString());
+				modelMap.addAttribute("arrProject",arrProject);
+				modelMap.addAttribute("user",user);
+				/*HashMap<String,Integer> hsmap=new HashMap<String,Integer>();
+				for(Project project:arrProject ) {
+					hsmap.put(project.getProject_id(), project.getProject_sequence());
+				}
+				
+				modelMap.addAttribute("projectFeatureMap", hsmap);
+				String menu_code=loginService.getJAdminMenuCodes(user.getUser_sequence());
+				if(!menu_code.isEmpty()||!menu_code.contains("")){
+					modelMap.addAttribute("menu_code",menu_code);	
+				}*/
+			}
+
+		}catch(Exception e) {
+			e.printStackTrace();
+			modelMap.addAttribute("errorString",e.getMessage());
+			return new ModelAndView("login/login");
+		}
+		//return new ModelAndView("cdg_home");
+		request.getSession().setAttribute("user", user);
+		ArrayList<RunFeeds1> feeds = loginService.getProjectFeeds((String)request.getSession().getAttribute("project"));
+		ArrayList<RunFeeds1> users = loginService.getProjectUsers((String)request.getSession().getAttribute("project"));
+		ArrayList<RunFeeds1> cruns = loginService.getCurrentRuns((String)request.getSession().getAttribute("project"));
+		ArrayList<RunFeeds1> lruns = loginService.getLastRuns((String)request.getSession().getAttribute("project"));
+		ArrayList<RunFeeds1> uruns = loginService.getUpcomingRuns((String)request.getSession().getAttribute("project"));
+		ArrayList<RunFeeds1> fruns = loginService.getFailedRuns((String)request.getSession().getAttribute("project"));
+		modelMap.addAttribute("feeds", feeds);
+		modelMap.addAttribute("users", users);
+		modelMap.addAttribute("cruns", cruns);
+		modelMap.addAttribute("lruns", lruns);
+		modelMap.addAttribute("uruns", uruns);
+		modelMap.addAttribute("fruns", fruns);
+		int feedrunning=cruns.size(), userno=users.size() , feedno=feeds.size();
+		modelMap.addAttribute("userno",userno);
+		modelMap.addAttribute("feedno",feedno);
+		modelMap.addAttribute("feedrunning",feedrunning);
+		return new ModelAndView("projectDashboard");
+	}
+	
+	
+	private void authenticationByJWT(String name, String token) {
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken("jwt", token);
+        Authentication authenticate = authenticationManager.authenticate(authToken);
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+	}
+	
+	
 	@RequestMapping(value = { "/login/dashboard"}, method = RequestMethod.GET)
 	public String helpPage(String project,ModelMap modelMap,HttpServletRequest request) throws Exception {
 		
@@ -224,7 +341,7 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = { "/login/connectionDetails"}, method = RequestMethod.POST)
-	public ModelAndView  connectionDetails(@Valid @ModelAttribute("src_val") String src_val,@Valid @ModelAttribute("usr") String userId,@Valid @ModelAttribute("proj") String project,@Valid @ModelAttribute("jwt") String jwt, ModelMap modelMap , HttpServletResponse httpServletResponse) throws IOException {
+	public ModelAndView  connectionDetails(@Valid @ModelAttribute("src_val") String src_val,@Valid @ModelAttribute("usr") String userId,@Valid @ModelAttribute("proj") String project,@Valid @ModelAttribute("jwt") String jwt, ModelMap modelMap , HttpServletResponse httpServletResponse) throws IOException, JSONException {
 		System.out.println("in connection controller");
 		JSONObject jsonObject= new JSONObject();
 		System.out.println("user->"+userId+" proj-->"+project+" jwt-->"+jwt);
@@ -232,19 +349,21 @@ public class LoginController {
 		jsonObject.put("project", project);
 		jsonObject.put("jwt", jwt);
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		System.out.println(oracle_front_micro_services);
+		System.out.println(unix_front_micro_services);
 		if(src_val.equalsIgnoreCase("oracle"))
 		{
-			return new ModelAndView("redirect://localhost:5000",modelMap);
+			return new ModelAndView("redirect://"+ oracle_front_micro_services ,modelMap);
 		}
 		else if(src_val.equalsIgnoreCase("Unix"))
 		{
-			return new ModelAndView("redirect://localhost:5001",modelMap);
+			return new ModelAndView("redirect://"+ unix_front_micro_services,modelMap);
 		} else
-			return new ModelAndView("redirect://localhost:5001",modelMap);
+			return new ModelAndView("redirect://localhost:5774",modelMap);
 	}
 	
 	@RequestMapping(value = { "/login/hipMS"}, method = RequestMethod.GET)
-	public ModelAndView hipMS( ModelMap modelMap ,HttpServletResponse response) throws IOException {
+	public ModelAndView hipMS( ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
 		System.out.println("inside hip controller");
 		/*response.setContentType("text/json;charset=UTF-8");
 		response.setHeader("Location", "//localhost:5771");
@@ -253,20 +372,21 @@ public class LoginController {
 		jsonObject.put("micro", "service");
 		//response.getWriter().write(jsonObject.toString());
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
-		return new ModelAndView("redirect:" + "//localhost:5771", modelMap);
+		return new ModelAndView("redirect:" + "//"+ hip_front_micro_services, modelMap);
 	}
 	
 	@RequestMapping(value = { "/login/adminMS"}, method = RequestMethod.GET)
-	public ModelAndView adminMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException {
+	public ModelAndView adminMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
 		System.out.println("inside hip controller user: "+user+" project: "+project);
 		/*response.setContentType("text/json;charset=UTF-8");
 		response.setHeader("Location", "//localhost:5771");
 		response.setStatus(302);*/
 		JSONObject jsonObject= new JSONObject();
-		jsonObject.put("user", user);
+		jsonObject.put("userId", user);
 		jsonObject.put("project", project);
+		jsonObject.put("jwt", jwt);
 		//response.getWriter().write(jsonObject.toString());
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
-		return new ModelAndView("redirect:" + "//localhost:5772", modelMap);
+		return new ModelAndView("redirect:" + "//"+ admin_front_micro_services, modelMap);
 	}
 }

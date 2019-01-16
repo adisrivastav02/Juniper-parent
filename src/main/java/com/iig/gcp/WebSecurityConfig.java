@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -67,11 +70,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
  
    
     @Override
+    @Order(1)
 	protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
 		authManagerBuilder.authenticationProvider(
 				activeDirectoryLdapAuthenticationProvider());
 	}
     
+    @Order(2)
+   	protected void configureTokenBased(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
+    	authManagerBuilder.authenticationProvider(new CustomAuthenticationProvider());
+   	}
     
     @Bean
 	public AuthenticationProvider activeDirectoryLdapAuthenticationProvider() {
@@ -89,5 +97,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	    web
 	       .ignoring()
 	       .antMatchers("/resources/**", "/assets/**");
+	}
+    
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
 }
