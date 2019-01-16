@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -341,8 +342,15 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = { "/login/connectionDetails"}, method = RequestMethod.POST)
-	public ModelAndView  connectionDetails(@Valid @ModelAttribute("src_val") String src_val,@Valid @ModelAttribute("usr") String userId,@Valid @ModelAttribute("proj") String project,@Valid @ModelAttribute("jwt") String jwt, ModelMap modelMap , HttpServletResponse httpServletResponse) throws IOException, JSONException {
+	public ModelAndView  connectionDetails(@Valid @ModelAttribute("src_val") String src_val,@Valid @ModelAttribute("usr") String userId,@Valid @ModelAttribute("proj") String project,@Valid @ModelAttribute("jwt") String jwt, ModelMap modelMap,HttpServletRequest request) throws ClassNotFoundException, SQLException, Exception {
 		System.out.println("in connection controller");
+		UserAccount user = (UserAccount)request.getSession().getAttribute("user");
+		String menu_code=loginService.getMenuCodes(user.getUser_sequence(),project);
+		menu_code=menu_code.replaceAll("\\$\\{user.user_id\\}", user.getUser_id());
+		menu_code=menu_code.replaceAll("\\$\\{project\\}", project);
+		menu_code=menu_code.replaceAll("\\$\\{jwt\\}", jwt);
+		modelMap.addAttribute("menu_code",menu_code);
+		modelMap.addAttribute("project",project);
 		JSONObject jsonObject= new JSONObject();
 		System.out.println("user->"+userId+" proj-->"+project+" jwt-->"+jwt);
 		jsonObject.put("userId", userId.toString());
@@ -388,5 +396,20 @@ public class LoginController {
 		//response.getWriter().write(jsonObject.toString());
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
 		return new ModelAndView("redirect:" + "//"+ admin_front_micro_services, modelMap);
+	}
+	
+	@RequestMapping(value = { "/login/schedulerMS"}, method = RequestMethod.GET)
+	public ModelAndView schedulerMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
+		System.out.println("inside hip controller user: "+user+" project: "+project);
+		/*response.setContentType("text/json;charset=UTF-8");
+		response.setHeader("Location", "//localhost:5771");
+		response.setStatus(302);*/
+		JSONObject jsonObject= new JSONObject();
+		jsonObject.put("user", user);
+		jsonObject.put("project", project);
+		jsonObject.put("jwt", jwt);
+		//response.getWriter().write(jsonObject.toString());
+		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		return new ModelAndView("redirect:" + "//localhost:5773", modelMap);
 	}
 }
