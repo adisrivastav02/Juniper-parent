@@ -52,6 +52,7 @@ public class UserDetailsContextMapperImpl implements UserDetailsContextMapper {
 	                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
 	                .sign(HMAC512(SECRET.getBytes()));
 			 arrUserAccount.setJwt_token(token);
+			 System.out.println("Token Parent" + token);
 		} catch (Exception e) {
 			e.printStackTrace();
 			arrUserAccount = new UserAccount();

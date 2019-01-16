@@ -114,6 +114,7 @@ public class LoginController {
 			return new ModelAndView("/login");
 		}
 		jsonModelObject = new JSONObject( jsonObject);
+		System.out.println("Child to Parent Token" + jsonModelObject.get("jwt").toString());
 		authenticationByJWT("jwt", jsonModelObject.get("jwt").toString());
 		}
 		catch(Exception e) {
@@ -184,7 +185,26 @@ public class LoginController {
 		modelMap.addAttribute("userno",userno);
 		modelMap.addAttribute("feedno",feedno);
 		modelMap.addAttribute("feedrunning",feedrunning);
-		return new ModelAndView("projectDashboard");
+		
+		
+		String menu_code=null;
+		try {
+			//UserAccount user = (UserAccount)request.getSession().getAttribute("user");
+			menu_code=loginService.getMenuCodes(user.getUser_sequence(),(String)request.getSession().getAttribute("project"));
+			menu_code=menu_code.replaceAll("\\$\\{user.user_id\\}", user.getUser_id());
+			menu_code=menu_code.replaceAll("\\$\\{project\\}", (String)request.getSession().getAttribute("project"));
+			menu_code=menu_code.replaceAll("\\$\\{jwt\\}", jsonModelObject.get("jwt").toString());
+			modelMap.addAttribute("menu_code",menu_code);
+			modelMap.addAttribute("project",(String)request.getSession().getAttribute("project"));
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ModelAndView("cdg_home");
+		
+		
+		//return new ModelAndView("projectDashboard");
 	}
 	
 	
@@ -365,6 +385,7 @@ public class LoginController {
 		}
 		else if(src_val.equalsIgnoreCase("Unix"))
 		{
+			System.out.println("Parent to Unix Token" + jwt);
 			return new ModelAndView("redirect://"+ unix_front_micro_services,modelMap);
 		} else
 			return new ModelAndView("redirect://localhost:5774",modelMap);
@@ -394,6 +415,7 @@ public class LoginController {
 		jsonObject.put("project", project);
 		jsonObject.put("jwt", jwt);
 		//response.getWriter().write(jsonObject.toString());
+		System.out.println("Parent to Admin Token" + jwt);
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
 		return new ModelAndView("redirect:" + "//"+ admin_front_micro_services, modelMap);
 	}
