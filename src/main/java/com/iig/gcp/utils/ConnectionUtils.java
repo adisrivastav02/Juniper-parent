@@ -5,15 +5,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ConnectionUtils {
 
-	public static Connection getConnection() 
+	@Autowired
+    private DataSource dataSource;
+	
+	public Connection getConnection() 
 			throws ClassNotFoundException, SQLException,Exception {
 
-		return OracleConnUtils.getOracleConnection();
+		//return OracleConnUtils.getOracleConnection();
+		return dataSource.getConnection();
 	}
 
 

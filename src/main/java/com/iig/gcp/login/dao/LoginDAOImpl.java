@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.iig.gcp.login.dto.Project;
@@ -23,6 +24,8 @@ import com.iig.gcp.utils.ConnectionUtils;
 @Component
 public class LoginDAOImpl implements LoginDAO {
 
+	@Autowired
+	private ConnectionUtils ConnectionUtils;
 	private static String USER_MASTER_TABLE = "JUNIPER_USER_MASTER";
 	private static String USER_GROUP_MASTER_TABLE = "JUNIPER_USER_GROUP_MASTER";
 	private static String UGROUP_USER_MASTER_TABLE = "JUNIPER_UGROUP_USER_LINK";
@@ -39,16 +42,20 @@ public class LoginDAOImpl implements LoginDAO {
 	public ArrayList<UserAccount> getUserAccount() throws Exception {
 		ArrayList<UserAccount> arrUsers= new ArrayList<UserAccount>();
 		String sql = "select user_id,user_sequence from "+USER_MASTER_TABLE+"";
-		Connection conn= ConnectionUtils.getConnection();
-		PreparedStatement pstm = conn.prepareStatement(sql); 
-		ResultSet rs = pstm.executeQuery();
-		while (rs.next()) {
-			UserAccount user = new UserAccount();
-			user.setUser_id(rs.getString(1));
-			user.setUser_sequence(rs.getInt(2));
-			arrUsers.add(user);	
+		Connection conn = null;
+		try {
+			conn= ConnectionUtils.getConnection();
+			PreparedStatement pstm = conn.prepareStatement(sql); 
+			ResultSet rs = pstm.executeQuery();
+			while (rs.next()) {
+				UserAccount user = new UserAccount();
+				user.setUser_id(rs.getString(1));
+				user.setUser_sequence(rs.getInt(2));
+				arrUsers.add(user);	
+			}
+		}catch(Exception e) {
+			conn.close();
 		}
-		ConnectionUtils.closeQuietly(conn);
 		return arrUsers;
 	}
 
@@ -205,7 +212,7 @@ public class LoginDAOImpl implements LoginDAO {
 				menu_level = rs.getInt(2);
 				menu_name.add(rs.getString(3));
 				menu_levell.add(menu_level);
-				
+
 				menu_code=menu_code+menu_link;
 			}
 		}
@@ -282,7 +289,7 @@ public class LoginDAOImpl implements LoginDAO {
 				menu_level = rs.getInt(2);
 				menu_name.add(rs.getString(3));
 				menu_levell.add(menu_level);
-				
+
 				menu_code=menu_code+menu_link;
 			}
 		}
@@ -308,6 +315,7 @@ public class LoginDAOImpl implements LoginDAO {
 					return "Y";
 				}
 			}
+			conn.close();
 		}
 		return "N";
 	}
@@ -478,13 +486,11 @@ public class LoginDAOImpl implements LoginDAO {
 		rs = pstm.executeQuery();
 		while (rs.next()) {
 			rf = new RunFeeds1();
-
 			rf.setFeed_name(rs.getString(1));
 			rf.setExtract_date(rs.getString(2));
 			rf.setFeed_type(rs.getString(3));
 			rf.setRun_id(rs.getString(4));
 			rf.setStart_time(rs.getString(5));
-
 			fruns_arr.add(rf);
 		}	
 
