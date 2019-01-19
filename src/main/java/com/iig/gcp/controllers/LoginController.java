@@ -114,8 +114,10 @@ public class LoginController {
 			return new ModelAndView("/login");
 		}
 		jsonModelObject = new JSONObject( jsonObject);
+		System.out.println(jsonModelObject.get("userId"));
+		System.out.println(jsonModelObject.get("project"));
 		System.out.println("Child to Parent Token" + jsonModelObject.get("jwt").toString());
-		authenticationByJWT("jwt", jsonModelObject.get("jwt").toString());
+		authenticationByJWT(jsonModelObject.get("userId").toString()+":"+jsonModelObject.get("project").toString(), jsonModelObject.get("jwt").toString());
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -209,7 +211,7 @@ public class LoginController {
 	
 	
 	private void authenticationByJWT(String name, String token) {
-		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken("jwt", token);
+		UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(name, token);
         Authentication authenticate = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(authenticate);
 	}

@@ -56,7 +56,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {
-        String name = authentication.getName();
+    	System.out.println(authentication.getPrincipal().toString());
+    	System.out.println(authentication.getCredentials().toString());
+    	
+    	
+    	System.out.println("-->"+authentication.getName());
+    	String name = authentication.getName().split(":")[0];
+        String project= authentication.getName().split(":")[1];
         Object credentials = authentication.getCredentials();
         System.out.println("credentials class: " + credentials.getClass());
         if (!(credentials instanceof String)) {
@@ -80,7 +86,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         MyUser m = new MyUser();
         m.setName(name);
         m.setJwt(password);
-        m.setProject("FCRDR");
+        m.setProject(project);
         m.setPassword(password);
         Authentication auth = new
                 UsernamePasswordAuthenticationToken(m, password, grantedAuthorities);
