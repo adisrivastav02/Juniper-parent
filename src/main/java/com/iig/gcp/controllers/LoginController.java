@@ -68,6 +68,9 @@ public class LoginController {
 	private String hip_front_micro_services;
 	
 	
+	@Value( "${propagation.front.micro.services}" )
+	private String propagation_front_micro_services;
+	
 	private static String oracle_pwd;
 	@Value("${oracle.encrypt.pwd}")
 	public void setPassword(String value) {
@@ -324,36 +327,6 @@ public class LoginController {
 	}
 	
 	
-	/*@RequestMapping(value = { "/login/extractionMS"}, method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> extractionMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException, URISyntaxException {
-		JSONObject jsonObject= new JSONObject();
-		jsonObject.put("user", user);
-		jsonObject.put("project", project);
-		response.setContentType("text/json;charset=UTF-8");
-		System.out.println("========="+jwt);
-		response.setHeader("jwt", jwt);
-		response.setStatus(302);
-		System.out.println(response.getHeader("jwt"));
-		response.sendRedirect("//localhost:5771");
-		Map<String, Object> message = new HashMap<String, Object>();
-		message.put("summary", "Authenticated successfully.");
-		message.put("success", true);
-		
-		org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
-		headers.put("jwt", Arrays.asList("abc"));
-		headers.setLocation(new URI("//localhost:5771"));
-		System.out.println(headers.getValuesAsList("jwt"));
-		return new ResponseEntity<Map<String, Object>>(message,headers,HttpStatus.MOVED_PERMANENTLY);
-		//return "redirect://localhost:5771/";
-		
-		return ResponseEntity.status(HttpStatus.CREATED).
-				header("jwt", jwt).
-				body(jsonObject);
-		//response.getWriter().write(jsonObject.toString());
-		modelMap.addAttribute("jsonObject",jsonObject.toString());
-		return new ModelAndView("redirect:" + "//localhost:5772", modelMap);
-	}*/
-	
 	@RequestMapping(value = { "/login/extractionMS"}, method = RequestMethod.GET)
 	public ModelAndView  extractionMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt,ModelMap modelMap ) throws IOException {
 		
@@ -362,7 +335,9 @@ public class LoginController {
 		modelMap.addAttribute("jwt",jwt);
 		return new ModelAndView("ConnectionHome");
 	}
-	
+	/*
+	 * Micro-service call for DATA EXTRACTION
+	 */
 	@RequestMapping(value = { "/login/connectionDetails"}, method = RequestMethod.POST)
 	public ModelAndView  connectionDetails(@Valid @ModelAttribute("src_val") String src_val,@Valid @ModelAttribute("usr") String userId,@Valid @ModelAttribute("proj") String project,@Valid @ModelAttribute("jwt") String jwt, ModelMap modelMap,HttpServletRequest request) throws ClassNotFoundException, SQLException, Exception {
 		UserAccount user = (UserAccount)request.getSession().getAttribute("user");
@@ -387,52 +362,60 @@ public class LoginController {
 		} else
 			return new ModelAndView("redirect://localhost:5774",modelMap);
 	}
-	
+	/*
+	 * Micro-service call for HIP Dashboard
+	 */
 	@RequestMapping(value = { "/login/hipMS"}, method = RequestMethod.GET)
 	public ModelAndView hipMS( ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
-		/*response.setContentType("text/json;charset=UTF-8");
-		response.setHeader("Location", "//localhost:5771");
-		response.setStatus(302);*/
 		JSONObject jsonObject= new JSONObject();
 		jsonObject.put("micro", "service");
-		//response.getWriter().write(jsonObject.toString());
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
 		return new ModelAndView("redirect:" + "//"+ hip_front_micro_services, modelMap);
 	}
-	
+	/*
+	 * Micro-service call for ADMIN PORTAL
+	 */
 	@RequestMapping(value = { "/login/adminMS"}, method = RequestMethod.GET)
 	public ModelAndView adminMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
-		/*response.setContentType("text/json;charset=UTF-8");
-		response.setHeader("Location", "//localhost:5771");
-		response.setStatus(302);*/
 		JSONObject jsonObject= new JSONObject();
 		jsonObject.put("userId", user);
 		jsonObject.put("project", project);
 		jsonObject.put("jwt", jwt);
-		//response.getWriter().write(jsonObject.toString());
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
 		return new ModelAndView("redirect:" + "//"+ admin_front_micro_services, modelMap);
 	}
-	
+	/*
+	 * Micro-service call for SCHEDULAR
+	 */
 	@RequestMapping(value = { "/login/schedulerMS"}, method = RequestMethod.GET)
 	public ModelAndView schedulerMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
-		/*response.setContentType("text/json;charset=UTF-8");
-		response.setHeader("Location", "//localhost:5771");
-		response.setStatus(302);*/
 		JSONObject jsonObject= new JSONObject();
 		jsonObject.put("user", user);
 		jsonObject.put("project", project);
 		jsonObject.put("jwt", jwt);
-		//response.getWriter().write(jsonObject.toString());
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
 		return new ModelAndView("redirect:" + "//localhost:5773", modelMap);
 	}
-	
+	/*
+	 * Micro-service call for HIP REGISTER
+	 */
 	@RequestMapping(value = { "/login/hipMS/register"}, method = RequestMethod.GET)
 	public ModelAndView hipMSRegister( ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
 		JSONObject jsonObject= new JSONObject();
 		jsonObject.put("micro", "service");
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
 		return new ModelAndView("redirect:" + "//"+ hip_front_micro_services+"/register", modelMap);
+	}
+	/*
+	 * Micro-service call for DATA PROPAGATION
+	 */
+	@RequestMapping(value = { "/login/datapropagationMS"}, method = RequestMethod.GET)
+	public ModelAndView datapropagationMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
+		JSONObject jsonObject= new JSONObject();
+		jsonObject.put("user", user);
+		jsonObject.put("project", project);
+		jsonObject.put("jwt", jwt);
+		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		return new ModelAndView("redirect:" + "//"+ propagation_front_micro_services, modelMap);
 	}
 }
