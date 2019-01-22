@@ -430,7 +430,7 @@ public class LoginController {
 	@RequestMapping(value = { "/login/smartArchivalMS"}, method = RequestMethod.GET)
 	public ModelAndView smartArchivalMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
 		JSONObject jsonObject= new JSONObject();
-		jsonObject.put("user", user);
+		jsonObject.put("userId", user);
 		jsonObject.put("project", project);
 		jsonObject.put("jwt", jwt);
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
