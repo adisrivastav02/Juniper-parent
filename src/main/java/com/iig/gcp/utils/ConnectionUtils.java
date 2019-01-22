@@ -6,11 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@Transactional
 public class ConnectionUtils {
 
 	@Autowired
@@ -18,14 +20,14 @@ public class ConnectionUtils {
 	
 	public Connection getConnection() 
 			throws ClassNotFoundException, SQLException,Exception {
-
+		System.out.println(dataSource.getClass().getName());
 		//return OracleConnUtils.getOracleConnection();
 		return dataSource.getConnection();
 	}
 
 
 
-	public static void closeQuietly(Connection conn) {
+	public void closeQuietly(Connection conn) {
 		try {
 			conn.commit();
 			conn.close();
@@ -40,14 +42,14 @@ public class ConnectionUtils {
 		}
 	}
 
-	public static void closeResultSet(ResultSet rs) {
+	public void closeResultSet(ResultSet rs) {
 		try {
 			rs.close();
 		} catch (Exception e) {
 		}
 	}
 
-	public static void closePrepareStatement(PreparedStatement ps) {
+	public void closePrepareStatement(PreparedStatement ps) {
 		try {
 			ps.close();
 		} catch (Exception e) {

@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,10 +24,12 @@ import com.iig.gcp.login.dto.UserGroup;
 import com.iig.gcp.utils.ConnectionUtils;
 
 @Component
+@Transactional
 public class LoginDAOImpl implements LoginDAO {
 
 	@Autowired
 	private ConnectionUtils ConnectionUtils;
+	
 	private static String USER_MASTER_TABLE = "JUNIPER_USER_MASTER";
 	private static String USER_GROUP_MASTER_TABLE = "JUNIPER_USER_GROUP_MASTER";
 	private static String UGROUP_USER_MASTER_TABLE = "JUNIPER_UGROUP_USER_LINK";
@@ -53,7 +57,11 @@ public class LoginDAOImpl implements LoginDAO {
 				user.setUser_sequence(rs.getInt(2));
 				arrUsers.add(user);	
 			}
+			pstm.close();
+			rs.close();
 		}catch(Exception e) {
+			throw e;
+		}finally {
 			conn.close();
 		}
 		return arrUsers;
@@ -73,6 +81,8 @@ public class LoginDAOImpl implements LoginDAO {
 			user.setUser_pass(rs.getString(2));
 			user.setUser_sequence(rs.getInt(3));
 		}
+		pstm.close();
+		rs.close();
 		ConnectionUtils.closeQuietly(conn);
 		return user;
 	}
@@ -110,6 +120,8 @@ public class LoginDAOImpl implements LoginDAO {
 				userRole.add(rs.getString(1));	
 			}
 		}
+		pstm.close();
+		rs.close();
 		ConnectionUtils.closeQuietly(conn);
 		return userRole;
 	}
@@ -136,7 +148,9 @@ public class LoginDAOImpl implements LoginDAO {
 			prj.setProject_sequence(rs.getInt(2));
 			arrProject.add(prj);	
 		}
-		ConnectionUtils.closeQuietly(conn);
+		pstm.close();
+		rs.close();
+		conn.close();
 		return arrProject;
 
 	}
@@ -163,6 +177,8 @@ public class LoginDAOImpl implements LoginDAO {
 			ugroup.setFeature_list(rs.getString(2));
 			userGroups.add(ugroup);
 		}
+		pstm.close();
+		rs.close();
 		ConnectionUtils.closeQuietly(conn);
 		return userGroups;
 
@@ -216,6 +232,7 @@ public class LoginDAOImpl implements LoginDAO {
 				menu_code=menu_code+menu_link;
 			}
 		}
+		pstm.close();
 		ConnectionUtils.closeQuietly(conn);
 		return menu_code;
 	}
@@ -293,6 +310,7 @@ public class LoginDAOImpl implements LoginDAO {
 				menu_code=menu_code+menu_link;
 			}
 		}
+		pstm.close();
 		ConnectionUtils.closeQuietly(conn);
 		return menu_code=menu_code+"</ul></div></li>";
 	}
@@ -315,6 +333,8 @@ public class LoginDAOImpl implements LoginDAO {
 					return "Y";
 				}
 			}
+			pstm.close();
+			rs.close();
 			conn.close();
 		}
 		return "N";
@@ -344,6 +364,8 @@ public class LoginDAOImpl implements LoginDAO {
 			ugroup.setFeature_list(rs.getString(2));
 			userGroups.add(ugroup);
 		}
+		pstm.close();
+		rs.close();
 		ConnectionUtils.closeQuietly(conn);
 		return userGroups;
 
@@ -365,6 +387,8 @@ public class LoginDAOImpl implements LoginDAO {
 			rf.setFeed_type(rs.getString(2));
 			feeds_arr.add(rf);
 		}
+		pstm.close();
+		rs.close();
 		ConnectionUtils.closeQuietly(conn);
 		return feeds_arr;
 	}
@@ -385,6 +409,8 @@ public class LoginDAOImpl implements LoginDAO {
 			rf.setUser_name(rs.getString(3));
 			users_arr.add(rf);
 		}
+		pstm.close();
+		rs.close();
 		ConnectionUtils.closeQuietly(conn);
 		return users_arr;
 	}
@@ -409,8 +435,6 @@ public class LoginDAOImpl implements LoginDAO {
 			rf.setEnd_time(rs.getString(5));
 			cruns_arr.add(rf);
 		}	
-
-
 		ConnectionUtils.closeResultSet(rs);
 		ConnectionUtils.closePrepareStatement(pstm);
 		ConnectionUtils.closeQuietly(connection);
@@ -437,8 +461,6 @@ public class LoginDAOImpl implements LoginDAO {
 			rf.setEnd_time(rs.getString(5));
 			lruns_arr.add(rf);
 		}	
-
-
 		ConnectionUtils.closeResultSet(rs);
 		ConnectionUtils.closePrepareStatement(pstm);
 		ConnectionUtils.closeQuietly(connection);
@@ -465,8 +487,6 @@ public class LoginDAOImpl implements LoginDAO {
 			rf.setEnd_time(rs.getString(5));
 			uruns_arr.add(rf);
 		}	
-
-
 		ConnectionUtils.closeResultSet(rs);
 		ConnectionUtils.closePrepareStatement(pstm);
 		ConnectionUtils.closeQuietly(connection);

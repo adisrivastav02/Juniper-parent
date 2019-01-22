@@ -71,6 +71,9 @@ public class LoginController {
 	@Value( "${propagation.front.micro.services}" )
 	private String propagation_front_micro_services;
 	
+	@Value( "${schedular.front.micro.services}" )
+	private String schedular_front_micro_services;
+	
 	private static String oracle_pwd;
 	@Value("${oracle.encrypt.pwd}")
 	public void setPassword(String value) {
@@ -394,7 +397,7 @@ public class LoginController {
 		jsonObject.put("project", project);
 		jsonObject.put("jwt", jwt);
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
-		return new ModelAndView("redirect:" + "//localhost:5773", modelMap);
+		return new ModelAndView("redirect:" + "//"+ schedular_front_micro_services, modelMap);
 	}
 	/*
 	 * Micro-service call for HIP REGISTER
