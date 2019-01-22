@@ -71,11 +71,13 @@ public class LoginDAOImpl implements LoginDAO {
 	public UserAccount findUserFromId(String user_id) throws Exception {
 
 		String sql = "select user_id,user_pass,user_sequence from juniper_user_master where user_id='"+user_id+"'";
-
-		Connection conn= ConnectionUtils.getConnection();
+		Connection conn= null;
+		UserAccount user = new UserAccount();
+		try {
+		 conn= ConnectionUtils.getConnection();
 		PreparedStatement pstm = conn.prepareStatement(sql); 
 		ResultSet rs = pstm.executeQuery();
-		UserAccount user = new UserAccount();
+		
 		while (rs.next()) {
 			user.setUser_id(rs.getString(1));
 			user.setUser_pass(rs.getString(2));
@@ -83,7 +85,16 @@ public class LoginDAOImpl implements LoginDAO {
 		}
 		pstm.close();
 		rs.close();
-		ConnectionUtils.closeQuietly(conn);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		
+		
+		finally {
+			conn.close();
+		}
 		return user;
 	}
 
@@ -92,11 +103,13 @@ public class LoginDAOImpl implements LoginDAO {
 	public List<String> findUserRoles(String user_id) throws Exception {
 
 		String sql = "select distinct ugm.feature_list from juniper_user_master u,juniper_ugroup_user_link ugl,juniper_user_group_master ugm where u.user_sequence=ugl.user_sequence and ugl.USER_GROUP_SEQUENCE =ugm.USER_GROUP_SEQUENCE and u.USER_ID='"+user_id+"'";
-
-		Connection conn= ConnectionUtils.getConnection();
+		Connection conn= null;
+		List<String> userRole = new ArrayList<String>();
+		try {
+		 conn= ConnectionUtils.getConnection();
 		PreparedStatement pstm = conn.prepareStatement(sql); 
 		ResultSet rs = pstm.executeQuery();
-		List<String> userRole = new ArrayList<String>();
+		
 
 		Set<String> features = new HashSet<String>();
 		while (rs.next()) {
@@ -122,7 +135,16 @@ public class LoginDAOImpl implements LoginDAO {
 		}
 		pstm.close();
 		rs.close();
-		ConnectionUtils.closeQuietly(conn);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			conn.close();
+		}
+		//ConnectionUtils.closeQuietly(conn);
+		
 		return userRole;
 	}
 
@@ -137,7 +159,10 @@ public class LoginDAOImpl implements LoginDAO {
 		String sql =  "SELECT  DISTINCT p.PROJECT_ID ,p.project_sequence FROM "+UGROUP_USER_MASTER_TABLE+" l inner join "
 				+ "juniper_project_master p on l.project_sequence=p.project_sequence where user_sequence in "
 				+ "(select user_sequence from "+USER_MASTER_TABLE+" where user_id=?)order by p.project_sequence desc";
-		Connection  conn= ConnectionUtils.getConnection();
+		
+		Connection  conn= null;
+		try {
+		 conn= ConnectionUtils.getConnection();
 		PreparedStatement pstm = conn.prepareStatement(sql);
 		pstm.setString(1, username);
 		ResultSet rs = pstm.executeQuery();
@@ -151,6 +176,14 @@ public class LoginDAOImpl implements LoginDAO {
 		pstm.close();
 		rs.close();
 		conn.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			conn.close();
+		}
 		return arrProject;
 
 	}
@@ -179,7 +212,7 @@ public class LoginDAOImpl implements LoginDAO {
 		}
 		pstm.close();
 		rs.close();
-		ConnectionUtils.closeQuietly(conn);
+		//ConnectionUtils.closeQuietly(conn);
 		return userGroups;
 
 	}
@@ -199,7 +232,9 @@ public class LoginDAOImpl implements LoginDAO {
 		List<Integer> menu_levell=new ArrayList<Integer>();  
 		int menu_level=0;
 		int i=0;
-		Connection conn= ConnectionUtils.getConnection();
+		Connection conn= null;
+		try {
+		conn= ConnectionUtils.getConnection();
 		List<UserGroup> userGroups=fetchGroupDetailsForUser(conn, user_sequence,project);
 		Set<Integer>sortedFeatureList=fetchSortedFeatureIds(userGroups);
 		String sql = "select f.feature_link,f.feature_level,f.feature_name FROM "+FEATURE_MASTER_TABLE+" f where f.feature_sequence=?";
@@ -233,7 +268,15 @@ public class LoginDAOImpl implements LoginDAO {
 			}
 		}
 		pstm.close();
-		ConnectionUtils.closeQuietly(conn);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			conn.close();
+		}
+		//ConnectionUtils.closeQuietly(conn);
 		return menu_code;
 	}
 
@@ -271,7 +314,9 @@ public class LoginDAOImpl implements LoginDAO {
 		List<Integer> menu_levell=new ArrayList<Integer>();  
 		int menu_level=0;
 		int i=0;
-		Connection conn= ConnectionUtils.getConnection();
+		Connection conn= null;
+		try {
+		conn= ConnectionUtils.getConnection();
 		List<UserGroup> userGroups=fetchJAdminGroupDetailsForUser(conn, user_sequence);
 		String isAdmin=checkIfUserBelongsToJAdminGroup(conn,userGroups);
 		//If user is not part of JAdmin then return
@@ -311,7 +356,15 @@ public class LoginDAOImpl implements LoginDAO {
 			}
 		}
 		pstm.close();
-		ConnectionUtils.closeQuietly(conn);
+		//ConnectionUtils.closeQuietly(conn);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			conn.close();
+		}
 		return menu_code=menu_code+"</ul></div></li>";
 	}
 
@@ -335,7 +388,7 @@ public class LoginDAOImpl implements LoginDAO {
 			}
 			pstm.close();
 			rs.close();
-			conn.close();
+			//conn.close();
 		}
 		return "N";
 	}
@@ -366,7 +419,7 @@ public class LoginDAOImpl implements LoginDAO {
 		}
 		pstm.close();
 		rs.close();
-		ConnectionUtils.closeQuietly(conn);
+		//ConnectionUtils.closeQuietly(conn);
 		return userGroups;
 
 	}
@@ -376,7 +429,9 @@ public class LoginDAOImpl implements LoginDAO {
 	public ArrayList<RunFeeds1> getProjectFeeds(String project) throws Exception {
 		ArrayList<RunFeeds1> feeds_arr = new ArrayList<RunFeeds1>();
 		String sql = "SELECT fm.FEED_UNIQUE_NAME,cm.SRC_CONN_TYPE|| ' ' ||fm.EXTRACTION_TYPE FROM (select a.src_conn_sequence,b.extraction_type,b.feed_unique_name,b.project_sequence from JUNIPER_EXT_FEED_SRC_TGT_LINK a,JUNIPER_EXT_FEED_MASTER b where a.feed_sequence = b.feed_sequence) fm LEFT JOIN JUNIPER_EXT_SRC_CONN_MASTER cm on fm.SRC_CONN_SEQUENCE=cm.SRC_CONN_SEQUENCE WHERE fm.PROJECT_SEQUENCE in (SELECT PROJECT_SEQUENCE FROM JUNIPER_PROJECT_MASTER WHERE PROJECT_ID=?)";
-		Connection conn= ConnectionUtils.getConnection();
+		Connection conn= null;
+		try {
+		conn= ConnectionUtils.getConnection();
 		RunFeeds1 rf = null;
 		PreparedStatement pstm = conn.prepareStatement(sql); 
 		pstm.setString(1, project);
@@ -389,7 +444,15 @@ public class LoginDAOImpl implements LoginDAO {
 		}
 		pstm.close();
 		rs.close();
-		ConnectionUtils.closeQuietly(conn);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			conn.close();
+		}
+		//ConnectionUtils.closeQuietly(conn);
 		return feeds_arr;
 	}
 
@@ -398,7 +461,10 @@ public class LoginDAOImpl implements LoginDAO {
 		ArrayList<RunFeeds1> users_arr = new ArrayList<RunFeeds1>();
 		RunFeeds1 rf = null;
 		String sql = "SELECT DISTINCT ul.USER_SEQUENCE,um.USER_ID,um.USER_FULLNAME FROM JUNIPER_UGROUP_USER_LINK ul LEFT JOIN JUNIPER_USER_MASTER um ON ul.USER_SEQUENCE=um.USER_SEQUENCE WHERE ul.PROJECT_SEQUENCE in (SELECT PROJECT_SEQUENCE FROM JUNIPER_PROJECT_MASTER WHERE PROJECT_ID=?)";
-		Connection conn= ConnectionUtils.getConnection();
+		
+		Connection conn= null;
+		try {
+		conn= ConnectionUtils.getConnection();
 		PreparedStatement pstm = conn.prepareStatement(sql); 
 		pstm.setString(1, project);
 		ResultSet rs = pstm.executeQuery();
@@ -411,7 +477,15 @@ public class LoginDAOImpl implements LoginDAO {
 		}
 		pstm.close();
 		rs.close();
-		ConnectionUtils.closeQuietly(conn);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			conn.close();
+		}
+		//ConnectionUtils.closeQuietly(conn);
 		return users_arr;
 	}
 
@@ -422,6 +496,7 @@ public class LoginDAOImpl implements LoginDAO {
 		ResultSet rs =null;
 		PreparedStatement pstm =null;
 		RunFeeds1 rf = null;
+		try {
 		connection = ConnectionUtils.getConnection();
 		pstm = connection.prepareStatement("SELECT DISTINCT JOB_ID , BATCH_ID ,CONCAT(CONCAT(BATCH_DATE,' '),JOB_SCHEDULE_TIME) AS SCHEDULE_TIME, TO_CHAR(START_TIME, 'DD-MON-YY HH24:MI:SS') AS START_TIME, TO_CHAR(END_TIME, 'DD-MON-YY HH24:MI:SS') AS END_TIME FROM JUNIPER_SCH_CURRENT_JOB_DETAIL WHERE TO_CHAR(START_TIME, 'DD-MON-YY HH24:MI:SS') BETWEEN TO_CHAR(SYSDATE-1, 'DD-MON-YY HH24:MI:SS') AND  TO_CHAR(SYSDATE, 'DD-MON-YY HH24:MI:SS') AND STATUS='R'  AND PROJECT_ID IN (SELECT PROJECT_SEQUENCE FROM JUNIPER_PROJECT_MASTER WHERE PROJECT_ID=?) ORDER BY START_TIME DESC");
 		pstm.setString(1, project);
@@ -437,7 +512,15 @@ public class LoginDAOImpl implements LoginDAO {
 		}	
 		ConnectionUtils.closeResultSet(rs);
 		ConnectionUtils.closePrepareStatement(pstm);
-		ConnectionUtils.closeQuietly(connection);
+		//ConnectionUtils.closeQuietly(connection);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			connection.close();
+		}
 		return cruns_arr;
 	}
 
@@ -448,6 +531,7 @@ public class LoginDAOImpl implements LoginDAO {
 		ResultSet rs =null;
 		PreparedStatement pstm =null;
 		RunFeeds1 rf = null;
+		try {
 		connection = ConnectionUtils.getConnection();
 		pstm = connection.prepareStatement("SELECT DISTINCT JOB_ID , BATCH_ID ,CONCAT(CONCAT(BATCH_DATE,' '),JOB_SCHEDULE_TIME) AS SCHEDULE_TIME, TO_CHAR(START_TIME, 'DD-MON-YY HH24:MI:SS') AS START_TIME, TO_CHAR(END_TIME, 'DD-MON-YY HH24:MI:SS') AS END_TIME FROM JUNIPER_SCH_CURRENT_JOB_DETAIL WHERE TO_CHAR(START_TIME, 'DD-MON-YY HH24:MI:SS') BETWEEN TO_CHAR(SYSDATE-1, 'DD-MON-YY HH24:MI:SS') AND  TO_CHAR(SYSDATE, 'DD-MON-YY HH24:MI:SS') AND STATUS='C'  AND PROJECT_ID IN (SELECT PROJECT_SEQUENCE FROM JUNIPER_PROJECT_MASTER WHERE PROJECT_ID=?) ORDER BY START_TIME DESC");
 		pstm.setString(1, project);
@@ -463,7 +547,15 @@ public class LoginDAOImpl implements LoginDAO {
 		}	
 		ConnectionUtils.closeResultSet(rs);
 		ConnectionUtils.closePrepareStatement(pstm);
-		ConnectionUtils.closeQuietly(connection);
+		//ConnectionUtils.closeQuietly(connection);
+		}
+		catch(Exception e ) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			connection.close();
+		}
 		return lruns_arr;
 	}
 
@@ -474,6 +566,7 @@ public class LoginDAOImpl implements LoginDAO {
 		ResultSet rs =null;
 		PreparedStatement pstm =null;
 		RunFeeds1 rf = null;
+		try {
 		connection = ConnectionUtils.getConnection();
 		pstm = connection.prepareStatement("SELECT DISTINCT JOB_ID , BATCH_ID ,CONCAT(CONCAT(BATCH_DATE,' '),JOB_SCHEDULE_TIME) AS SCHEDULE_TIME, TO_CHAR(START_TIME, 'DD-MON-YY HH24:MI:SS') AS START_TIME, TO_CHAR(END_TIME, 'DD-MON-YY HH24:MI:SS') AS END_TIME FROM JUNIPER_SCH_CURRENT_JOB_DETAIL WHERE TO_CHAR(START_TIME, 'DD-MON-YY HH24:MI:SS') BETWEEN TO_CHAR(SYSDATE, 'DD-MON-YY HH24:MI:SS') AND  TO_CHAR(SYSDATE+1, 'DD-MON-YY HH24:MI:SS')  AND PROJECT_ID IN (SELECT PROJECT_SEQUENCE FROM JUNIPER_PROJECT_MASTER WHERE PROJECT_ID=?) ORDER BY START_TIME DESC");
 		pstm.setString(1, project);
@@ -489,7 +582,15 @@ public class LoginDAOImpl implements LoginDAO {
 		}	
 		ConnectionUtils.closeResultSet(rs);
 		ConnectionUtils.closePrepareStatement(pstm);
-		ConnectionUtils.closeQuietly(connection);
+		//ConnectionUtils.closeQuietly(connection);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			connection.close();
+		}
 		return uruns_arr;
 	}
 
@@ -500,6 +601,7 @@ public class LoginDAOImpl implements LoginDAO {
 		ResultSet rs =null;
 		PreparedStatement pstm =null;
 		RunFeeds1 rf = null;
+		try {
 		connection = ConnectionUtils.getConnection();
 		pstm = connection.prepareStatement("SELECT DISTINCT FEED_UNIQUE_NAME,EXTRACTED_DATE,PG_TYPE,RUN_ID,JOB_START_TIME FROM JUNIPER_EXT_NIFI_STATUS WHERE upper(trim(STATUS)) = 'FAILED' and TO_CHAR(JOB_START_TIME, 'DD-MON-YY HH24:MI:SS') BETWEEN TO_CHAR(SYSDATE-1, 'DD-MON-YY HH24:MI:SS') AND  TO_CHAR(SYSDATE, 'DD-MON-YY HH24:MI:SS')  and  ROWNUM  <=10 and PROJECT_SEQUENCE=(SELECT PROJECT_SEQUENCE FROM JUNIPER_PROJECT_MASTER WHERE PROJECT_ID=?) ORDER BY JOB_START_TIME DESC");
 		pstm.setString(1, project);
@@ -517,7 +619,14 @@ public class LoginDAOImpl implements LoginDAO {
 
 		ConnectionUtils.closeResultSet(rs);
 		ConnectionUtils.closePrepareStatement(pstm);
-		ConnectionUtils.closeQuietly(connection);
+		//ConnectionUtils.closeQuietly(connection);
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			connection.close();
+		}
 		return fruns_arr;
 	}
 }

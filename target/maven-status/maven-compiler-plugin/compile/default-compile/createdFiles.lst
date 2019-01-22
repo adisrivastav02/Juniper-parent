@@ -15,6 +15,7 @@ com\iig\gcp\WebSecurityConfig.class
 com\iig\gcp\utils\ConnectionUtils.class
 com\iig\gcp\login\service\LoginService.class
 com\iig\gcp\utils\EncryptionUtil.class
+com\iig\gcp\utils\DataSourceConfig.class
 com\iig\gcp\login\service\UserDetailsContextMapperImpl.class
 com\iig\gcp\controllers\LoginController.class
 com\iig\gcp\login\dto\Project.class
