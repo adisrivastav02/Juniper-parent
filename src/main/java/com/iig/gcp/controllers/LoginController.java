@@ -74,6 +74,9 @@ public class LoginController {
 	@Value( "${schedular.front.micro.services}" )
 	private String schedular_front_micro_services;
 	
+	@Value( "${smartarchival.front.micro.services}" )
+	private String smartarchival_front_micro_services;
+	
 	private static String oracle_pwd;
 	@Value("${oracle.encrypt.pwd}")
 	public void setPassword(String value) {
@@ -420,5 +423,17 @@ public class LoginController {
 		jsonObject.put("jwt", jwt);
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
 		return new ModelAndView("redirect:" + "//"+ propagation_front_micro_services, modelMap);
+	}
+	/*
+	 * Micro-service call for SMART ARCHIVAL
+	 */
+	@RequestMapping(value = { "/login/smartArchivalMS"}, method = RequestMethod.GET)
+	public ModelAndView smartArchivalMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
+		JSONObject jsonObject= new JSONObject();
+		jsonObject.put("user", user);
+		jsonObject.put("project", project);
+		jsonObject.put("jwt", jwt);
+		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		return new ModelAndView("redirect:" + "//"+ smartarchival_front_micro_services, modelMap);
 	}
 }
