@@ -67,6 +67,9 @@ public class LoginController {
 	@Value( "${hip.front.micro.services}" )
 	private String hip_front_micro_services;
 	
+	@Value( "${hive.front.micro.services}" )
+	private String hive_front_micro_services;
+	
 	
 	@Value( "${propagation.front.micro.services}" )
 	private String propagation_front_micro_services;
@@ -365,6 +368,10 @@ public class LoginController {
 		else if(src_val.equalsIgnoreCase("Unix"))
 		{
 			return new ModelAndView("redirect://"+ unix_front_micro_services,modelMap);
+		} 
+		else if(src_val.equalsIgnoreCase("Hive"))
+		{
+			return new ModelAndView("redirect://"+ hive_front_micro_services,modelMap);
 		} else
 			return new ModelAndView("redirect://localhost:5774",modelMap);
 	}
