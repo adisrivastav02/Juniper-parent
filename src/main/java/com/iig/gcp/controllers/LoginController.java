@@ -80,6 +80,9 @@ public class LoginController {
 	@Value( "${smartarchival.front.micro.services}" )
 	private String smartarchival_front_micro_services;
 	
+	@Value( "${teradata.front.micro.services}" )
+	private String teradata_front_micro_services;
+	
 	private static String oracle_pwd;
 	@Value("${oracle.encrypt.pwd}")
 	public void setPassword(String value) {
@@ -372,6 +375,9 @@ public class LoginController {
 		else if(src_val.equalsIgnoreCase("Hive"))
 		{
 			return new ModelAndView("redirect://"+ hive_front_micro_services,modelMap);
+		} else if(src_val.equalsIgnoreCase("Teradata"))
+		{
+			return new ModelAndView("redirect://"+ teradata_front_micro_services,modelMap);
 		} else
 			return new ModelAndView("redirect://localhost:5774",modelMap);
 	}
