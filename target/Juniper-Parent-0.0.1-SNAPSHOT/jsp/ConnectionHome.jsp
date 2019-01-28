@@ -41,6 +41,11 @@
 								            <img class="img-fluid img-thumbnail" src="${pageContext.request.contextPath}/assets/img/linux.png">
 								          </a>
 								    </div>
+								    <div class="thumbnail col-lg-3 col-md-4 col-xs-6">
+								      <a class="d-block mb-4 h-100" href="#"  onclick="pass('Hive');">
+								      	<img class="img-fluid img-thumbnail" src="${pageContext.request.contextPath}/assets/img/hive.png">
+								      </a> 
+								    </div>
 								     <div class="thumbnail col-lg-3 col-md-4 col-xs-6">
 								      <a href="#" class="d-block mb-4 h-100" onclick="pass('Hadoop');">
 								            <img class="img-fluid img-thumbnail" src="${pageContext.request.contextPath}/assets/img/hadoop.png">
@@ -56,11 +61,7 @@
 								            <img class="img-fluid img-thumbnail" src="${pageContext.request.contextPath}/assets/img/sqlserver.png">
 								          </a>
 								    </div>
-								    <div class="thumbnail col-lg-3 col-md-4 col-xs-6">
-								      <a class="d-block mb-4 h-100" href="#"  onclick="pass('Hive');">
-								      	<img class="img-fluid img-thumbnail" src="${pageContext.request.contextPath}/assets/img/hive.png">
-								      </a> 
-								    </div>
+								    
 								     <div class="thumbnail col-lg-3 col-md-4 col-xs-6">
 								      	<a href="#" class="d-block mb-4 h-100">
 								      		<img class="img-fluid img-thumbnail" src="${pageContext.request.contextPath}/assets/img/gstorage.png">
