@@ -80,8 +80,12 @@ public class LoginController {
 	@Value( "${smartarchival.front.micro.services}" )
 	private String smartarchival_front_micro_services;
 	
+
 	@Value( "${teradata.front.micro.services}" )
 	private String teradata_front_micro_services;
+
+	@Value( "${business.glossary.front.micro.services}" )
+	private String business_glossary_front_micro_services;
 	
 	private static String oracle_pwd;
 	@Value("${oracle.encrypt.pwd}")
@@ -448,5 +452,17 @@ public class LoginController {
 		jsonObject.put("jwt", jwt);
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
 		return new ModelAndView("redirect:" + "//"+ smartarchival_front_micro_services, modelMap);
+	}
+	/*
+	 * Micro-service call for BUSINESS GLOSSARY
+	 */
+	@RequestMapping(value = { "/login/businessGlossaryMS"}, method = RequestMethod.GET)
+	public ModelAndView businessGlossaryMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
+		JSONObject jsonObject= new JSONObject();
+		jsonObject.put("user", user);
+		jsonObject.put("project", project);
+		jsonObject.put("jwt", jwt);
+		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		return new ModelAndView("redirect:" + "//"+ business_glossary_front_micro_services, modelMap);
 	}
 }
