@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: Juniper-Parent
 Implementation-Version: 0.0.1-SNAPSHOT
-Built-By: adisr
+Built-By: Rylanpatrick_M
 Implementation-Vendor-Id: com.iig.gcp
-Build-Jdk: 1.8.0_171
+Build-Jdk: 1.8.0_191
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
  ot-starter-parent/Juniper-Parent
 Created-By: Maven Integration for Eclipse
