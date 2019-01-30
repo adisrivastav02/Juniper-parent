@@ -229,7 +229,7 @@
 					</select>
 				</div>
 				<input type="hidden" id="jwt" name="jwt"
-					value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTU0OTcxNTg2NH0.B4gqtxKGUe-nvCKRFmKoOQdoLDFqole_NjSSrEGxy1hiYfupai0at6piCKpNGAIdChf_GHW1tIFsn20F6CiSrQ" />
+					value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.getPassword()}" />
 				<ul class="navbar-nav navbar-nav-right">
 					<li class="nav-item nav-profile dropdown"><a
 						class="nav-link dropdown-toggle" id="profileDropdown" href="#"
