@@ -36,10 +36,10 @@
               <h6 class="font-weight-light">Sign in to continue.</h6>
               <form class="pt-3" action="${pageContext.request.contextPath}/login" method="POST">
                 <div class="form-group">
-                  <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="Username">
+                  <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="Username" required="required">
                 </div>
                 <div class="form-group">
-                  <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Password">
+                  <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Password" required="required">
                 </div>
                 <div class="mt-3">
                 	<button type="submit" class="btn btn-block btn-facebook auth-form-btn">

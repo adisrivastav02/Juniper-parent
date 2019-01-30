@@ -72,8 +72,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @Order(1)
 	protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
+    	
 		authManagerBuilder.authenticationProvider(
-				activeDirectoryLdapAuthenticationProvider());
+				new CustomAuthenticationProvider1());
 	}
     
     @Order(2)
@@ -81,7 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     	authManagerBuilder.authenticationProvider(new CustomAuthenticationProvider());
    	}
     
-    @Bean
+   /* @Bean
 	public AuthenticationProvider activeDirectoryLdapAuthenticationProvider() {
 		ActiveDirectoryLdapAuthenticationProvider provider = new ActiveDirectoryLdapAuthenticationProvider(
 				domain, ldapurl);
@@ -90,7 +91,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		provider.setUserDetailsContextMapper(userDetailsContextMapper);
 		
 		return provider;
-	}
+	}*/
     
     @Override
 	public void configure(WebSecurity web) throws Exception {
