@@ -65,7 +65,7 @@ class DataSourceConfig {
         jdbcConfig.setJdbcUrl(dataSourceUrl);
         jdbcConfig.setUsername(user);
         jdbcConfig.setPassword(orcl_decoded_pwd);
-        jdbcConfig.setDriverClassName("oracle.jdbc.driver.OracleDriver");
+        jdbcConfig.setDriverClassName(dataSourceClassName);
         return new HikariDataSource(jdbcConfig);
         
         
