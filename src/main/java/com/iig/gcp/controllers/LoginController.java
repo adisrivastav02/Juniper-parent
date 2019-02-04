@@ -87,6 +87,9 @@ public class LoginController {
 	@Value( "${business.glossary.front.micro.services}" )
 	private String business_glossary_front_micro_services;
 	
+	@Value( "${publishing.bq.front.micro.services}" )
+	private String publishing_bq_front_micro_services;
+	
 	private static String oracle_pwd;
 	@Value("${oracle.encrypt.pwd}")
 	public void setPassword(String value) {
@@ -342,18 +345,18 @@ public class LoginController {
 		return "/login/login";
 	}
 	
-	
+
+	/*
+	 * Micro-service call for DATA EXTRACTION
+	 */
 	@RequestMapping(value = { "/login/extractionMS"}, method = RequestMethod.GET)
 	public ModelAndView  extractionMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt,ModelMap modelMap ) throws IOException {
 		
 		modelMap.addAttribute("usr",user.toString());
 		modelMap.addAttribute("proj",project);
 		modelMap.addAttribute("jwt",jwt);
-		return new ModelAndView("ConnectionHome");
+		return new ModelAndView("connectionHome");
 	}
-	/*
-	 * Micro-service call for DATA EXTRACTION
-	 */
 	@RequestMapping(value = { "/login/connectionDetails"}, method = RequestMethod.POST)
 	public ModelAndView  connectionDetails(@Valid @ModelAttribute("src_val") String src_val,@Valid @ModelAttribute("usr") String userId,@Valid @ModelAttribute("proj") String project,@Valid @ModelAttribute("jwt") String jwt, ModelMap modelMap,HttpServletRequest request) throws ClassNotFoundException, SQLException, Exception {
 		UserAccount user = (UserAccount)request.getSession().getAttribute("user");
@@ -464,5 +467,37 @@ public class LoginController {
 		jsonObject.put("jwt", jwt);
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
 		return new ModelAndView("redirect:" + "//"+ business_glossary_front_micro_services, modelMap);
+	}
+	/*
+	 * Micro-service call for DATA PUBLISHING
+	 */
+	@RequestMapping(value = { "/login/publishingMS"}, method = RequestMethod.GET)
+	public ModelAndView  publishingMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt,ModelMap modelMap ) throws IOException {
+		
+		modelMap.addAttribute("usr",user.toString());
+		modelMap.addAttribute("proj",project);
+		modelMap.addAttribute("jwt",jwt);
+		return new ModelAndView("publishingHome");
+	}
+	
+	@RequestMapping(value = { "/login/publishingDetails"}, method = RequestMethod.POST)
+	public ModelAndView  publishingDetails(@Valid @ModelAttribute("src_val") String src_val,@Valid @ModelAttribute("usr") String userId,@Valid @ModelAttribute("proj") String project,@Valid @ModelAttribute("jwt") String jwt, ModelMap modelMap,HttpServletRequest request) throws ClassNotFoundException, SQLException, Exception {
+		UserAccount user = (UserAccount)request.getSession().getAttribute("user");
+		String menu_code=loginService.getMenuCodes(user.getUser_sequence(),project);
+		menu_code=menu_code.replaceAll("\\$\\{user.user_id\\}", user.getUser_id());
+		menu_code=menu_code.replaceAll("\\$\\{project\\}", project);
+		menu_code=menu_code.replaceAll("\\$\\{jwt\\}", jwt);
+		modelMap.addAttribute("menu_code",menu_code);
+		modelMap.addAttribute("project",project);
+		JSONObject jsonObject= new JSONObject();
+		jsonObject.put("userId", userId.toString());
+		jsonObject.put("project", project);
+		jsonObject.put("jwt", jwt);
+		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		if(src_val.equalsIgnoreCase("BigQuery"))
+		{
+			return new ModelAndView("redirect://"+ publishing_bq_front_micro_services ,modelMap);
+		} else
+			return new ModelAndView("redirect://localhost:5774",modelMap);
 	}
 }
