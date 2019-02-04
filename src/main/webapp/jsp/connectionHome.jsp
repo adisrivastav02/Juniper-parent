@@ -6,7 +6,7 @@
 		var usr=document.getElementById('usr').value;
 		var proj=document.getElementById('proj').value;
 		var jwt=document.getElementById('jwt').value;
-		document.getElementById('ConnectionHome').submit();
+		document.getElementById('connectionHome').submit();
 	}
 </script>
 
@@ -18,7 +18,7 @@
 					<div class="card-body">
 						<h4 class="card-title">Data Extraction</h4>
 						<p class="card-description">Connection Details</p>
-						<form class="forms-sample" id="ConnectionHome" name="ConnectionHome"
+						<form class="forms-sample" id="connectionHome" name="connectionHome"
 							method="post" action="${pageContext.request.contextPath}/login/connectionDetails">
 							<input type="hidden" name="src_val" id="src_val" value="">
 							<input type="hidden" name="usr" id="usr" value="${usr}">
