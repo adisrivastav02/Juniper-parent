@@ -67,7 +67,7 @@
 								      		<img class="img-fluid img-thumbnail" src="${pageContext.request.contextPath}/assets/img/gstorage.png">
 								      	</a>
 								    </div>
-								    <div class="thumbnail col-lg-3 col-md-4 col-xs-6">
+								    <div class="thumbnail col-lg-3 col-md-4 col-xs-6" onclick="pass('Db2');">
 								    	<a class="d-block mb-4 h-100" href="#">
 								    		<img class="img-fluid img-thumbnail" src="${pageContext.request.contextPath}/assets/img/db2.png">
 								    	</a>
