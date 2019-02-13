@@ -89,6 +89,9 @@ public class LoginController {
 	
 	@Value( "${publishing.bq.front.micro.services}" )
 	private String publishing_bq_front_micro_services;
+
+	@Value( "${kafka.front.micro.services}" )
+	private String kafka_front_micro_services;
 	
 	private static String oracle_pwd;
 	@Value("${oracle.encrypt.pwd}")
@@ -499,5 +502,17 @@ public class LoginController {
 			return new ModelAndView("redirect://"+ publishing_bq_front_micro_services ,modelMap);
 		} else
 			return new ModelAndView("redirect://localhost:5774",modelMap);
+	}
+	/*
+	 * Micro-service call for KAFKA Real Time
+	 */
+	@RequestMapping(value = { "/login/kafkaMS"}, method = RequestMethod.GET)
+	public ModelAndView kafkaMS(@RequestParam String user,@RequestParam String project,@RequestParam String jwt, ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
+		JSONObject jsonObject= new JSONObject();
+		jsonObject.put("userId", user);
+		jsonObject.put("project", project);
+		jsonObject.put("jwt", jwt);
+		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		return new ModelAndView("redirect://"+kafka_front_micro_services, modelMap);
 	}
 }
