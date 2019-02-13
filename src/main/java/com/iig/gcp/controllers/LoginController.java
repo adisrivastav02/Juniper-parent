@@ -93,6 +93,9 @@ public class LoginController {
 	@Value( "${kafka.front.micro.services}" )
 	private String kafka_front_micro_services;
 	
+	@Value( "${db2.front.micro.services}" )
+	private String db2_front_micro_services;
+	
 	private static String oracle_pwd;
 	@Value("${oracle.encrypt.pwd}")
 	public void setPassword(String value) {
@@ -388,7 +391,10 @@ public class LoginController {
 		} else if(src_val.equalsIgnoreCase("Teradata"))
 		{
 			return new ModelAndView("redirect://"+ teradata_front_micro_services,modelMap);
-		} else
+		}  else if(src_val.equalsIgnoreCase("Db2"))
+		{
+			return new ModelAndView("redirect://"+ db2_front_micro_services,modelMap);
+		}else
 			return new ModelAndView("redirect://localhost:5774",modelMap);
 	}
 	/*

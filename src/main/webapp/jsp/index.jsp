@@ -92,6 +92,7 @@
                                 </div>
                             </li> -->
                             <li><a href="#">Contact</a></li>
+                            <li><a href="#testimonial" data-section="#testimonial">Testimonials</a></li>
                         </ul>
                     </div>
                 </nav>
@@ -251,6 +252,16 @@ Portfolio Section Start
                     </figcaption>
                 </figure>
             </div>
+            </div>
+            </div>
+            </section>
+            <section id="testimonial" class="testimonial">
+   			 <div class="container">
+   			 <div class="row">
+   			 <img src="${pageContext.request.contextPath}/assets/img/hsbc.jpg" class="img-fluid" alt="HSBC">
+   			 </div>
+   			 </div>
+   			 </section>
           <!--  <div class="col-sm-4 col-xs-12">
                 <figure class="wow fadeInLeft animated" data-wow-duration="500ms" data-wow-delay="600ms">
                     <div class="img-wrapper">
