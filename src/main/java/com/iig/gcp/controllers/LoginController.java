@@ -70,6 +70,9 @@ public class LoginController {
 	@Value( "${hive.front.micro.services}" )
 	private String hive_front_micro_services;
 	
+	@Value( "${mssql.front.micro.services}" )
+	private String mssql_front_micro_services;
+	
 	
 	@Value( "${propagation.front.micro.services}" )
 	private String propagation_front_micro_services;
@@ -394,7 +397,11 @@ public class LoginController {
 		}  else if(src_val.equalsIgnoreCase("Db2"))
 		{
 			return new ModelAndView("redirect://"+ db2_front_micro_services,modelMap);
-		}else
+		}else if(src_val.equalsIgnoreCase("Mssql"))
+		{
+			return new ModelAndView("redirect://"+ mssql_front_micro_services,modelMap);
+		}
+		else
 			return new ModelAndView("redirect://localhost:5774",modelMap);
 	}
 	/*
