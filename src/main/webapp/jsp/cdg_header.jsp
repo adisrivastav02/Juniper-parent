@@ -202,10 +202,10 @@
 			<div
 				class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
 				<a class="navbar-brand brand-logo"
-					href="${pageContext.request.contextPath}/"><img
+					href="${pageContext.request.contextPath}/login/dashboard"><img
 					src="${pageContext.request.contextPath}/assets/img/juniper.jpg"
 					alt="logo" /></a> <a class="navbar-brand brand-logo-mini"
-					href="${pageContext.request.contextPath}/"><img
+					href="${pageContext.request.contextPath}/login/dashboard"><img
 					src="${pageContext.request.contextPath}/assets/img/junipersmall.jpg"
 					alt="logo" /></a>
 			</div>

@@ -67,6 +67,9 @@ public class LoginController {
 	@Value( "${hip.front.micro.services}" )
 	private String hip_front_micro_services;
 	
+	@Value( "${jlogger.front.micro.services}" )
+	private String jlogger_front_micro_services;
+	
 	@Value( "${hive.front.micro.services}" )
 	private String hive_front_micro_services;
 	
@@ -413,6 +416,16 @@ public class LoginController {
 		jsonObject.put("micro", "service");
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
 		return new ModelAndView("redirect:" + "//"+ hip_front_micro_services, modelMap);
+	}
+	/*
+	 * Micro-service call for JLogger
+	 */
+	@RequestMapping(value = { "/login/jloggerMS"}, method = RequestMethod.GET)
+	public ModelAndView jloggerMS( ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
+		JSONObject jsonObject= new JSONObject();
+		jsonObject.put("micro", "service");
+		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		return new ModelAndView("redirect:" + "//"+ jlogger_front_micro_services, modelMap);
 	}
 	/*
 	 * Micro-service call for ADMIN PORTAL

@@ -184,10 +184,10 @@ Portfolio Section Start
            
         </div>
         <div class="row">
-            <div class="col-sm-4 col-xs-12">
-                <figure class="wow fadeInLeft animated portfolio-item" data-wow-duration="500ms" data-wow-delay="0ms">
+            <div class="col-sm-3 col-xs-12">
+                <figure class="wow fadeInLeft animated portfolio-item" data-wow-duration="500ms" data-wow-delay="0ms" style="height:285px;">
                     <div class="img-wrapper">
-                        <img src="${pageContext.request.contextPath}/documents/images/portfolio/login.jpg" class="img-responsive" alt="this is a title" >
+                        <img src="${pageContext.request.contextPath}/documents/images/portfolio/login.jpg" class="img-responsive" alt="" >
                         <div class="overlay">
                             <div class="buttons">
                                 <a rel="gallery" class="fancybox" href="${pageContext.request.contextPath}/login">Login</a>
@@ -207,10 +207,10 @@ Portfolio Section Start
                     </figcaption>
                 </figure>
             </div>
-            <div class="col-sm-4 col-xs-12">
-                <figure class="wow fadeInLeft animated" data-wow-duration="500ms" data-wow-delay="300ms">
+            <div class="col-sm-3 col-xs-12">
+                <figure class="wow fadeInLeft animated" data-wow-duration="500ms" data-wow-delay="300ms" style="height:285px;">
                     <div class="img-wrapper">
-                        <img src="${pageContext.request.contextPath}/documents/images/portfolio/dashboard.jpg" class="img-responsive" alt="this is a title" >
+                        <img src="${pageContext.request.contextPath}/documents/images/portfolio/dashboard.jpg" class="img-responsive" alt="" >
                         <div class="overlay">
                             <div class="buttons" align="center">
                                 <a rel="gallery" class="fancybox" href="/login/hipMS">HIP Dashboards</a>
@@ -229,8 +229,8 @@ Portfolio Section Start
                     </figcaption>
                 </figure>
             </div>
-            <div class="col-sm-4 col-xs-12">
-                <figure class="wow fadeInLeft animated" data-wow-duration="500ms" data-wow-delay="300ms">
+            <div class="col-sm-3 col-xs-12">
+                <figure class="wow fadeInLeft animated" data-wow-duration="500ms" data-wow-delay="300ms" style="height:285px;">
                     <div class="img-wrapper">
                         <img src="${pageContext.request.contextPath}/documents/images/portfolio/register.jpg" class="img-responsive" alt="" >
                         <div class="overlay">
@@ -248,6 +248,29 @@ Portfolio Section Start
                     </h4>
                     <p>
                    Do One-Time Registry of your feed			
+                    </p>
+                    </figcaption>
+                </figure>
+            </div>
+             <div class="col-sm-3 col-xs-12">
+                <figure class="wow fadeInLeft animated" data-wow-duration="500ms" data-wow-delay="300ms" style="height:285px;">
+                    <div class="img-wrapper">
+                        <img src="${pageContext.request.contextPath}/documents/images/portfolio/dashboard.jpg" class="img-responsive" alt="" >
+                        <div class="overlay">
+                            <div class="buttons">
+                                <a rel="gallery" class="fancybox" href="/login/jloggerMS">J-Logger</a>
+                                <!--<a target="_blank" href="single-portfolio.html">Details</a>-->
+                            </div>
+                        </div>
+                    </div>
+                    <figcaption>
+                    <h4>
+                    <a href="#">
+                        J-Logger
+                    </a>
+                    </h4>
+                    <p>
+                   One stop to view all your feed logs			
                     </p>
                     </figcaption>
                 </figure>
