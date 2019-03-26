@@ -541,4 +541,12 @@ public class LoginController {
 		modelMap.addAttribute("jsonObject",jsonObject.toString());
 		return new ModelAndView("redirect://"+kafka_front_micro_services, modelMap);
 	}
+	
+	@RequestMapping(value = { "/login/hipMS/lineage"}, method = RequestMethod.GET)
+	public ModelAndView hipMSlineage( ModelMap modelMap ,HttpServletResponse response) throws IOException, JSONException {
+		JSONObject jsonObject= new JSONObject();
+		jsonObject.put("micro", "service");
+		modelMap.addAttribute("jsonObject",jsonObject.toString());
+		return new ModelAndView("redirect:" + "//"+ hip_front_micro_services+"/lineage", modelMap);
+	}
 }

@@ -183,6 +183,41 @@ Portfolio Section Start
 				</p>
            
         </div>
+        
+        <div class="row">
+     
+     <!--     <a class="btn-lines dark light wow fadeInUp animated smooth-scroll btn btn-default" data-wow-delay=".9s" href="/login/hipMS/lineage" >See Where Your Data goes!</a> -->
+      	 <div class="col-sm-3 col-xs-12"> </div>
+         <div class="col-sm-6 col-xs-12">
+                <figure class="wow fadeInLeft animated" data-wow-duration="500ms" data-wow-delay="300ms">
+                    <div class="img-wrapper">
+                        <img src="${pageContext.request.contextPath}/assets/img/Lineage.png" class="img-responsive" alt="" >
+                        <div class="overlay">
+                            <div class="buttons">
+                                <a rel="gallery" class="fancybox" href="/login/hipMS/lineage">Lineage Dashboard</a>
+                                <!--<a target="_blank" href="single-portfolio.html">Details</a>-->
+                            </div>
+                        </div>
+                    </div>
+                    <figcaption>
+                    <h4>
+                    <a href="/login/hipMS/lineage">
+                        Lineage Dashboard
+                    </a>
+                    </h4>
+                    <p>
+                   Track Where Your Data goes			
+                    </p>
+                    </figcaption>
+                </figure>
+            </div>
+        <div class="col-sm-3 col-xs-12"> </div>
+       
+        </div>
+      
+        <br>
+        
+        
         <div class="row">
             <div class="col-sm-3 col-xs-12">
                 <figure class="wow fadeInLeft animated portfolio-item" data-wow-duration="500ms" data-wow-delay="0ms" style="height:285px;">
